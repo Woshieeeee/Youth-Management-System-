@@ -1,0 +1,4160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay Longos Youth Program Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* All the CSS styles from your original code remain the same */
+        :root {
+            --primary: #8a4fff;
+            --primary-dark: #6a2fcf;
+            --primary-light: #a97cff;
+            --secondary: #ffcc00;
+            --secondary-dark: #e6b800;
+            --light: #f4f4f4;
+            --dark: #333333;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --purple-light: #f0e6ff;
+            --purple-bg: #f8f5ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--purple-bg);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles - FIXED */
+        header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .top-bar {
+            background-color: rgba(0,0,0,0.2);
+            padding: 8px 0;
+            font-size: 0.9rem;
+        }
+        
+        .top-bar-content {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .logo img {
+            height: 70px;
+            margin-right: 15px;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, rgba(255,255,255,0.98), rgba(255,236,179,0.95));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .logo-text p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.9);
+            margin-top: 2px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 15px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        #guest-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* FIXED: User profile layout */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+            font-weight: bold;
+        }
+        
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            white-space: nowrap;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: white;
+        }
+        
+        .user-role {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        /* FIXED: Button styles for admin nav */
+        .admin-nav-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--secondary);
+            color: var(--dark);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn-secondary {
+            background-color: var(--primary-light);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+        
+        /* FIXED: Responsive styles for admin nav */
+        @media (max-width: 992px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            nav ul {
+                margin-top: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px;
+            }
+            
+            .user-profile {
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .admin-nav-buttons {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .logo-text h1 {
+                font-size: 1.5rem;
+            }
+            
+            .logo-text p {
+                font-size: 0.75rem;
+            }
+            
+            .user-profile {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .admin-nav-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .admin-nav-buttons .btn {
+                width: 100%;
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo-text h1 {
+                font-size: 1.3rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            nav ul li {
+                margin: 2px 0;
+                width: 100%;
+            }
+            
+            nav ul li a {
+                display: block;
+                text-align: center;
+                padding: 10px;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(138, 79, 255, 0.85), rgba(106, 47, 207, 0.9)), url('https://images.unsplash.com/photo-1551135049-8a33b42738b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            position: relative;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 20px auto 0;
+        }
+        
+        /* Dashboard */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .card .trend {
+            font-size: 0.9rem;
+            color: var(--success);
+        }
+        
+        /* Programs Section */
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .program-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .program-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .program-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .program-image:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        }
+        
+        .program-content {
+            padding: 20px;
+        }
+        
+        .program-category {
+            display: inline-block;
+            background-color: var(--purple-light);
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .program-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .program-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .program-description {
+            margin-bottom: 15px;
+            color: var(--gray);
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .status-upcoming {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-completed {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: var(--gray);
+        }
+        
+        /* Forms */
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(138, 79, 255, 0.1);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        /* Password Toggle */
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+        }
+        
+        /* Password Strength Indicator */
+        .password-strength {
+            height: 5px;
+            margin-top: 8px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .password-strength.weak {
+            background-color: var(--danger);
+            width: 25%;
+        }
+        
+        .password-strength.fair {
+            background-color: var(--warning);
+            width: 50%;
+        }
+        
+        .password-strength.good {
+            background-color: var(--info);
+            width: 75%;
+        }
+        
+        .password-strength.strong {
+            background-color: var(--success);
+            width: 100%;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Announcements */
+        .announcements-list {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .announcement-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: flex-start;
+            transition: background-color 0.3s;
+        }
+        
+        .announcement-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .announcement-item:last-child {
+            border-bottom: none;
+        }
+        
+        .announcement-icon {
+            background-color: var(--purple-light);
+            color: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .announcement-content h4 {
+            margin-bottom: 5px;
+        }
+        
+        .announcement-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* New: Try-out Announcement Cards */
+        .tryout-announcement {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s;
+        }
+        
+        .tryout-announcement:hover {
+            transform: translateY(-5px);
+        }
+        
+        .tryout-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .tryout-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .tryout-header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .tryout-body {
+            padding: 25px;
+        }
+        
+        .tryout-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .tryout-detail {
+            display: flex;
+            align-items: center;
+        }
+        
+        .tryout-detail i {
+            color: var(--primary);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .tryout-requirements {
+            background-color: var(--purple-light);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .tryout-requirements h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .tryout-requirements ul {
+            list-style-type: none;
+        }
+        
+        .tryout-requirements li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .tryout-requirements li:before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .tryout-slogan {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .about-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .about-image {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .officials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .official-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s;
+            margin-bottom: 40px;
+        }
+        
+        .official-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .official-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background-color: var(--purple-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2rem;
+            border: 3px solid var(--secondary);
+        }
+        
+        .official-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .official-position {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Fire Volunteer Section */
+        .fire-volunteer-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin: 40px 0;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fire-volunteer-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
+        
+        .fire-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .fire-title {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .fire-subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .fire-anniversary {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 30px 0;
+            backdrop-filter: blur(5px);
+        }
+        
+        .fire-anniversary h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .fire-anniversary p {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .fire-date {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--secondary);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            position: relative;
+            animation: modalAppear 0.3s ease-out;
+        }
+        
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h2 {
+            color: var(--primary);
+            margin: 0;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--dark);
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        /* Forgot Password Link */
+        .forgot-password {
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+        
+        .forgot-password a {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+        
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Terms Checkbox */
+        .terms-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .terms-checkbox input {
+            margin-top: 3px;
+        }
+        
+        .terms-checkbox label {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        
+        .terms-link {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Form Validation */
+        .form-control.error {
+            border-color: var(--danger);
+        }
+        
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: block;
+        }
+        
+        /* New: Mission & Vision Section */
+        .mission-vision {
+            background-color: white;
+            border-radius: 8px;
+            padding: 50px;
+            margin: 40px 0;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+        
+        .mission-vision-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .mission-box, .vision-box {
+            background-color: var(--purple-light);
+            padding: 30px;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .mission-box h3, .vision-box h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* New: Testimonials Section */
+        .testimonials {
+            margin: 40px 0;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--gray);
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--purple-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+        
+        .testimonial-name {
+            font-weight: 600;
+        }
+        
+        .testimonial-role {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* New: History Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+        
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content::after {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: -15px;
+            border: medium solid white;
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent white;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content::after {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: -15px;
+            border: medium solid white;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent white transparent transparent;
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .about-content, .mission-vision-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .fire-title {
+                font-size: 2.5rem;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content::after,
+            .timeline-item:nth-child(even) .timeline-content::after {
+                left: -15px;
+                border-width: 10px 10px 10px 0;
+                border-color: transparent white transparent transparent;
+            }
+            
+            .tryout-details {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .hero {
+                padding: 70px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-4 {
+            margin-bottom: 2rem;
+        }
+        
+        .mt-4 {
+            margin-top: 2rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: var(--success);
+            color: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1100;
+            transform: translateX(150%);
+            transition: transform 0.3s ease-out;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+
+        /* NEW STYLES FOR ENHANCED FEATURES */
+        
+        .admin-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .edit-btn {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .delete-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .user-only {
+            display: none;
+        }
+        
+        .logged-in .user-only {
+            display: block;
+        }
+        
+        .admin-only {
+            display: none;
+        }
+        
+        .admin .admin-only {
+            display: block;
+        }
+        
+        .participant-form {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-controls select, .filter-controls input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .report-message {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            resize: vertical;
+        }
+        
+        .program-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-available {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .status-full {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+        
+        .registration-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            border: 1px solid var(--success);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .guest-only {
+            display: block;
+        }
+        
+        .logged-in .guest-only {
+            display: none;
+        }
+        
+        .edit-participant-modal {
+            max-width: 600px;
+        }
+
+        /* View-only mode for participants page */
+        .view-only .action-buttons {
+            display: none;
+        }
+        
+        .view-only .admin-controls {
+            display: none;
+        }
+        
+        /* NEW STYLES FOR USER REPORTS */
+        .report-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .report-meta {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .report-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-resolved {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .status-in-progress {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info);
+        }
+        
+        .report-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .user-report-form {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .report-type-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .report-type-option {
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .report-type-option:hover {
+            border-color: var(--primary-light);
+        }
+        
+        .report-type-option.selected {
+            border-color: var(--primary);
+            background-color: var(--purple-light);
+        }
+        
+        .report-type-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-text">
+                    <h1>Barangay Longos</h1>
+                    <p>Youth Program Management System</p>
+                </div>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" data-page="home">Home</a></li>
+                    <li><a href="#" data-page="about">About</a></li>
+                    <li><a href="#" data-page="programs">Programs</a></li>
+                    <li><a href="#" data-page="participants">Participants</a></li>
+                    <li><a href="#" data-page="reports" class="admin-only">User Reports</a></li>
+                    <li><a href="#" data-page="user-report" class="guest-only">Submit Report</a></li>
+                    <li><a href="#" data-page="announcements">Announcements</a></li>
+                    <li><a href="#" data-page="contact">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <div class="auth-buttons">
+                <div id="user-profile" class="user-profile hidden">
+                    <div class="user-avatar" id="user-avatar"></div>
+                    <div class="user-info">
+                        <div class="user-name" id="user-name">Administrator</div>
+                        <div class="user-role" id="user-role">Admin</div>
+                    </div>
+                    <div class="admin-nav-buttons">
+                        <button class="btn btn-secondary" id="change-password-btn">Change Password</button>
+                        <button class="btn btn-outline" id="logout-btn">Logout</button>
+                    </div>
+                </div>
+                <div id="guest-buttons">
+                    <button class="btn btn-outline" id="loginBtn">Login</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Admin Login</h2>
+                <button class="close-modal" id="close-login-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" required>
+                        <button type="button" class="password-toggle" id="login-password-toggle">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="forgot-password">
+                        <a href="#" id="forgot-password-link">Forgot your password?</a>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn" style="width: 100%;" id="login-submit-btn">
+                            <span id="login-btn-text">Login</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Reset Admin Password</h2>
+                <button class="close-modal" id="close-forgot-password-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Enter your current password and new password to reset your admin password.</p>
+                <form id="forgot-password-form">
+                    <div class="form-group">
+                        <label for="current-password-reset">Current Password</label>
+                        <input type="password" class="form-control" id="current-password-reset" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-password-reset">New Password</label>
+                        <input type="password" class="form-control" id="new-password-reset" required>
+                        <button type="button" class="password-toggle" id="new-password-reset-toggle"><i class="far fa-eye"></i></button>
+                        <div class="password-strength" id="new-password-reset-strength"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm-new-password-reset">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirm-new-password-reset" required>
+                        <button type="button" class="password-toggle" id="confirm-new-password-reset-toggle"><i class="far fa-eye"></i></button>
+                        <small class="error-message" id="confirm-new-password-reset-error"></small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn" style="width: 100%;" id="reset-submit-btn">
+                            <span id="reset-btn-text">Reset Password</span>
+                        </button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p><a href="#" id="back-to-login-modal">Back to Login</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="change-password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Change Password</h2>
+                <button class="close-modal" id="close-change-password">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="change-password-form">
+                    <div class="form-group">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" class="form-control" id="current-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" class="form-control" id="new-password" required>
+                        <button type="button" class="password-toggle" id="new-password-toggle"><i class="far fa-eye"></i></button>
+                        <div class="password-strength" id="new-password-strength"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-new-password">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirm-new-password" required>
+                        <button type="button" class="password-toggle" id="confirm-new-password-toggle"><i class="far fa-eye"></i></button>
+                        <small class="error-message" id="confirm-new-password-error"></small>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn">Update Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Participant Modal -->
+    <div id="edit-participant-modal" class="modal">
+        <div class="modal-content edit-participant-modal">
+            <div class="modal-header">
+                <h2>Edit Participant</h2>
+                <button class="close-modal" id="close-edit-participant-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-participant-form">
+                    <input type="hidden" id="edit-participant-id">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-participant-name">Full Name</label>
+                            <input type="text" class="form-control" id="edit-participant-name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit-participant-age">Age</label>
+                            <input type="number" class="form-control" id="edit-participant-age" min="15" max="30" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-participant-contact">Contact Number</label>
+                            <input type="tel" class="form-control" id="edit-participant-contact" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit-participant-address">Address</label>
+                            <input type="text" class="form-control" id="edit-participant-address" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-program-category">Program Category</label>
+                            <select class="form-control" id="edit-program-category" required>
+                                <option value="">Choose a category...</option>
+                                <option value="sports">Sports & Recreation</option>
+                                <option value="education">Education & Workshops</option>
+                                <option value="health">Health & Wellness</option>
+                                <option value="environment">Environmental</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit-program-type">Program Type</label>
+                            <select class="form-control" id="edit-program-type" required>
+                                <option value="">Select category first...</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-emergency-contact">Emergency Contact Person</label>
+                            <input type="text" class="form-control" id="edit-emergency-contact" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit-emergency-number">Emergency Contact Number</label>
+                            <input type="tel" class="form-control" id="edit-emergency-number" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-participant-status">Status</label>
+                        <select class="form-control" id="edit-participant-status" required>
+                            <option value="active">Active</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn">Update Participant</button>
+                        <button type="button" class="btn btn-outline" id="cancel-edit-btn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home-section">
+        <div class="container">
+            <h1>Empowering the Youth of Barangay Longos</h1>
+            <p>A comprehensive platform for managing youth programs, tracking participation, and fostering community engagement in Barangay Longos, Malabon City.</p>
+            <a href="#" class="btn btn-secondary" data-page="programs">Explore Programs</a>
+            <button class="btn btn-outline" id="hero-register-btn">Register as Participant</button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Home Page Content -->
+        <div id="home-content" class="page-content">
+            <section class="section-title">
+                <h2>Youth Program Dashboard</h2>
+                <p>Welcome to the Youth Program Management System for Barangay Longos. Track programs, manage participants, and generate reports all in one place.</p>
+            </section>
+            
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <div class="card">
+                    <h3>Active Programs</h3>
+                    <div class="number">12</div>
+                    <p>Ongoing youth initiatives</p>
+                    <div class="trend"><i class="fas fa-arrow-up"></i> 3 new this month</div>
+                </div>
+                <div class="card">
+                    <h3>Total Participants</h3>
+                    <div class="number">347</div>
+                    <p>Youth engaged in programs</p>
+                    <div class="trend"><i class="fas fa-arrow-up"></i> 15% increase</div>
+                </div>
+                <div class="card">
+                    <h3>Upcoming Events</h3>
+                    <div class="number">5</div>
+                    <p>Scheduled for this month</p>
+                    <div class="trend"><i class="fas fa-calendar"></i> Next: Sep 15</div>
+                </div>
+                <div class="card">
+                    <h3>Feedback Received</h3>
+                    <div class="number">89</div>
+                    <p>From program participants</p>
+                    <div class="trend"><i class="fas fa-comments"></i> 92% positive</div>
+                </div>
+            </div>
+            
+            <!-- Mission & Vision Section -->
+            <section class="mission-vision">
+                <div class="section-title">
+                    <h2>Our Mission & Vision</h2>
+                    <p>Guiding principles that drive our youth programs</p>
+                </div>
+                
+                <div class="mission-vision-content">
+                    <div class="mission-box">
+                        <h3><i class="fas fa-bullseye"></i> Our Mission</h3>
+                        <p>To empower the youth of Barangay Longos through comprehensive programs that foster personal development, civic engagement, and community leadership. We aim to provide opportunities for growth, learning, and active participation in community affairs.</p>
+                    </div>
+                    
+                    <div class="vision-box">
+                        <h3><i class="fas fa-eye"></i> Our Vision</h3>
+                        <p>A vibrant, inclusive community where every young person in Barangay Longos has the opportunity to reach their full potential, actively contributes to community development, and becomes responsible, productive citizens of Malabon City and the Philippines.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Recent Programs -->
+            <section class="section-title">
+                <h2>Featured Programs</h2>
+                <p>Discover our current and upcoming youth programs designed to empower and develop the youth of Barangay Longos.</p>
+            </section>
+            
+            <div class="programs-grid">
+                <div class="program-card">
+                    <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="program-content">
+                        <span class="program-category">Sports & Recreation</span>
+                        <h3 class="program-title">Basketball Tournament 2025</h3>
+                        <div class="program-meta">
+                            <span><i class="far fa-calendar"></i> Sep 15 - Oct 20, 2025</span>
+                            <span><i class="far fa-user"></i> 45 participants</span>
+                        </div>
+                        <p class="program-description">Annual inter-zone basketball competition for youth aged 15-21. Prizes for winning teams and skills challenges.</p>
+                        <a href="#" class="btn btn-outline">View Details</a>
+                    </div>
+                </div>
+                
+                <div class="program-card">
+                    <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="program-content">
+                        <span class="program-category">Education & Workshops</span>
+                        <h3 class="program-title">Digital Literacy Workshop</h3>
+                        <div class="program-meta">
+                            <span><i class="far fa-calendar"></i> Aug 10 - Aug 30, 2025</span>
+                            <span><i class="far fa-user"></i> 32 participants</span>
+                        </div>
+                        <p class="program-description">Learn essential digital skills including computer basics, internet safety, and productivity tools.</p>
+                        <a href="#" class="btn btn-outline">View Details</a>
+                    </div>
+                </div>
+                
+                <div class="program-card">
+                    <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1582719471384-894fbb16e074?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="program-content">
+                        <span class="program-category">Environmental Projects</span>
+                        <h3 class="program-title">Community Clean-up Drive</h3>
+                        <div class="program-meta">
+                            <span><i class="far fa-calendar"></i> Jul 5, 2025</span>
+                            <span><i class="far fa-user"></i> 78 participants</span>
+                        </div>
+                        <p class="program-description">Join fellow youth in cleaning up public spaces and promoting environmental awareness in our community.</p>
+                        <a href="#" class="btn btn-outline">View Details</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonials Section -->
+            <section class="testimonials">
+                <div class="section-title">
+                    <h2>What Our Youth Say</h2>
+                    <p>Hear from participants of our youth programs</p>
+                </div>
+                
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            "The basketball tournament helped me build confidence and make new friends. It's amazing how sports can bring our community together!"
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <div class="testimonial-name">Mark Santos</div>
+                                <div class="testimonial-role">Basketball Tournament Participant</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            "The digital literacy workshop taught me skills that helped me get a part-time job. I'm grateful for this opportunity to learn and grow."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <div class="testimonial-name">Anna Reyes</div>
+                                <div class="testimonial-role">Digital Literacy Workshop Attendee</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            "Being part of the environmental program made me realize how important it is to take care of our community. I'm proud to contribute to making Barangay Longos cleaner."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <div class="testimonial-name">Carlos Garcia</div>
+                                <div class="testimonial-role">Environmental Program Volunteer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Recent Announcements -->
+            <section class="section-title">
+                <h2>Latest Announcements</h2>
+                <p>Stay updated with the latest news and announcements from Barangay Longos.</p>
+            </section>
+            
+            <div class="announcements-list">
+                <div class="announcement-item">
+                    <div class="announcement-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div class="announcement-content">
+                        <h4>Registration for Basketball Tournament Now Open</h4>
+                        <p>Youth aged 15-21 can now register for the annual basketball tournament. Visit the barangay hall or register online through our website.</p>
+                        <div class="announcement-date">September 5, 2025</div>
+                    </div>
+                </div>
+                
+                <div class="announcement-item">
+                    <div class="announcement-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="announcement-content">
+                        <h4>SK Meeting Schedule for September 2025</h4>
+                        <p>The Sangguniang Kabataan will hold its regular meetings every Saturday of September at the Barangay Hall from 2:00 PM to 4:00 PM.</p>
+                        <div class="announcement-date">September 1, 2025</div>
+                    </div>
+                </div>
+                
+                <div class="announcement-item">
+                    <div class="announcement-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="announcement-content">
+                        <h4>Recognition Day for Outstanding Youth</h4>
+                        <p>Join us on September 30, 2025 as we recognize outstanding youth contributors in Barangay Longos for their achievements and community service.</p>
+                        <div class="announcement-date">August 28, 2025</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- About Page Content -->
+        <div id="about-content" class="page-content hidden">
+            <section class="section-title">
+                <h2>About Barangay Longos</h2>
+                <p>Learn more about our barangay, our officials, and our commitment to youth development.</p>
+            </section>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Welcome to Barangay Longos</h3>
+                    <p>Barangay Longos is one of the 21 barangays of Malabon City, Metro Manila, Philippines. Situated in a flood-prone area, our community has shown remarkable resilience and strength in the face of challenges.</p>
+                    <p>Our barangay is sustained by a network of small to medium enterprises that cater to the everyday needs of residents. These include sari-sari stores, carinderias, tailoring shops, and home-based food businesses that reflect Malabon's rich culinary heritage.</p>
+                    <p>The Youth Program Management System was developed to support the Sangguniang Kabataan in efficiently managing youth programs, tracking participation, and fostering community engagement among the youth of Barangay Longos.</p>
+                    <a href="#" class="btn mt-4">Learn More About Our History</a>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1551135049-8a33b42738b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Barangay Longos Community">
+                </div>
+            </div>
+            
+            <!-- History Timeline -->
+            <section class="section-title">
+                <h2>Our History</h2>
+                <p>Key milestones in the development of Barangay Longos</p>
+            </section>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1975</div>
+                        <h4>Establishment of Barangay Longos</h4>
+                        <p>Barangay Longos was officially established as one of the barangays of Malabon City, with its first set of barangay officials elected by the community.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1991</div>
+                        <h4>Local Government Code Implementation</h4>
+                        <p>With the implementation of the Local Government Code, Barangay Longos gained more autonomy and responsibilities in local governance.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2005</div>
+                        <h4>Youth Development Program Launch</h4>
+                        <p>The first structured youth development program was launched, focusing on sports, education, and community service for young residents.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2018</div>
+                        <h4>New Fire Volunteer Organization</h4>
+                        <p>The New Longos Fire Volunteer organization was established to enhance community safety and emergency response capabilities.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2023</div>
+                        <h4>Digital Transformation Initiative</h4>
+                        <p>Barangay Longos began its digital transformation journey with the development of online services and management systems.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <section class="section-title">
+                <h2>Our Officials</h2>
+                <p>Meet the dedicated individuals serving Barangay Longos</p>
+            </section>
+            
+            <div class="officials-grid">
+                <div class="official-card">
+                    <div class="official-image">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="official-name">Angelika Dela Cruz</div>
+                    <div class="official-position">Barangay Captain</div>
+                </div>
+                
+                <div class="official-card">
+                    <div class="official-image">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="official-name">Irish S. Evangelista</div>
+                    <div class="official-position">SK Chairperson</div>
+                </div>
+                
+                <div class="official-card">
+                    <div class="official-image">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="official-name">Juan Dela Cruz</div>
+                    <div class="official-position">SK Kagawad</div>
+                </div>
+                
+                <div class="official-card">
+                    <div class="official-image">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="official-name">Maria Santos</div>
+                    <div class="official-position">SK Kagawad</div>
+                </div>
+            </div>
+            
+            <!-- Community Statistics -->
+            <section class="section-title">
+                <h2>Community Statistics</h2>
+                <p>Key facts and figures about Barangay Longos</p>
+            </section>
+            
+            <div class="dashboard-cards">
+                <div class="card">
+                    <h3>Total Population</h3>
+                    <div class="number">15,342</div>
+                    <p>Residents of Barangay Longos</p>
+                </div>
+                <div class="card">
+                    <h3>Youth Population</h3>
+                    <div class="number">4,602</div>
+                    <p>Aged 15-30 years old</p>
+                </div>
+                <div class="card">
+                    <h3>Households</h3>
+                    <div class="number">3,285</div>
+                    <p>Registered households</p>
+                </div>
+                <div class="card">
+                    <h3>Area</h3>
+                    <div class="number">0.85</div>
+                    <p>Square kilometers</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Programs Page Content -->
+        <div id="programs-content" class="page-content hidden">
+            <section class="section-title">
+                <h2>Youth Programs</h2>
+                <p>Browse all available youth programs and activities in Barangay Longos</p>
+            </section>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="sports">Sports & Recreation</div>
+                <div class="tab" data-tab="education">Education & Workshops</div>
+                <div class="tab" data-tab="health">Health & Wellness</div>
+                <div class="tab" data-tab="environment">Environmental</div>
+            </div>
+            
+            <div class="tab-content active" id="sports-programs">
+                <div class="programs-grid">
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Sports & Recreation</span>
+                            <h3 class="program-title">Basketball Tournament 2025</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Sep 15 - Oct 20, 2025</span>
+                                <span><i class="far fa-user"></i> 45 participants</span>
+                            </div>
+                            <p class="program-description">Annual inter-zone basketball competition for youth aged 15-21. Prizes for winning teams and skills challenges.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Sports & Recreation</span>
+                            <h3 class="program-title">Volleyball League</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Oct 10 - Nov 15, 2025</span>
+                                <span><i class="far fa-user"></i> 60 participants</span>
+                            </div>
+                            <p class="program-description">Join our volleyball league for both men and women. Open to youth aged 15-21 with different skill levels.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="education-programs">
+                <div class="programs-grid">
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Education & Workshops</span>
+                            <h3 class="program-title">Youth Lectures</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Every Saturday</span>
+                                <span><i class="far fa-user"></i> 25 participants</span>
+                            </div>
+                            <p class="program-description">Weekly lectures on various topics including leadership, career guidance, and personal development.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Education & Workshops</span>
+                            <h3 class="program-title">Youth Seminars</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Monthly</span>
+                                <span><i class="far fa-user"></i> 40 participants</span>
+                            </div>
+                            <p class="program-description">Monthly seminars on important youth topics including mental health, financial literacy, and civic engagement.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Education & Workshops</span>
+                            <h3 class="program-title">Free Tutoring Session</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Weekdays after school</span>
+                                <span><i class="far fa-user"></i> 35 participants</span>
+                            </div>
+                            <p class="program-description">Free tutoring sessions for students needing help with their academics. Volunteer tutors from local colleges.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Education & Workshops</span>
+                            <h3 class="program-title">Scholarship Assistance</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Ongoing</span>
+                                <span><i class="far fa-user"></i> 15 participants</span>
+                            </div>
+                            <p class="program-description">Assistance program for youth seeking scholarships for college and vocational training.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Education & Workshops</span>
+                            <h3 class="program-title">Reading Programs</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Every Saturday</span>
+                                <span><i class="far fa-user"></i> 20 participants</span>
+                            </div>
+                            <p class="program-description">Weekly reading sessions to promote literacy and love for reading among the youth.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="health-programs">
+                <div class="programs-grid">
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Health & Wellness</span>
+                            <h3 class="program-title">Youth Wellness Seminars</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Monthly</span>
+                                <span><i class="far fa-user"></i> 30 participants</span>
+                            </div>
+                            <p class="program-description">Monthly seminars focusing on physical and mental wellness for the youth.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Health & Wellness</span>
+                            <h3 class="program-title">Journaling Workshops</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Bi-weekly</span>
+                                <span><i class="far fa-user"></i> 25 participants</span>
+                            </div>
+                            <p class="program-description">Learn the art of journaling for mental clarity, self-reflection, and emotional well-being.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Health & Wellness</span>
+                            <h3 class="program-title">Nutrition Month Activity</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> July 2025</span>
+                                <span><i class="far fa-user"></i> 50 participants</span>
+                            </div>
+                            <p class="program-description">Month-long activities promoting healthy eating habits and nutrition education.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1591288320683-cc3b892236db?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Health & Wellness</span>
+                            <h3 class="program-title">Gardening For Wellness</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Every Saturday</span>
+                                <span><i class="far fa-user"></i> 20 participants</span>
+                            </div>
+                            <p class="program-description">Therapeutic gardening sessions to promote mental wellness and environmental awareness.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1571008887538-b36bb32f4571?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Health & Wellness</span>
+                            <h3 class="program-title">Fun Runs</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Quarterly</span>
+                                <span><i class="far fa-user"></i> 100 participants</span>
+                            </div>
+                            <p class="program-description">Quarterly fun runs promoting physical fitness and community bonding.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="environment-programs">
+                <div class="programs-grid">
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1574263867128-a3d5c1b1deae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Environmental</span>
+                            <h3 class="program-title">Tree Planting</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Quarterly</span>
+                                <span><i class="far fa-user"></i> 40 participants</span>
+                            </div>
+                            <p class="program-description">Quarterly tree planting activities to promote environmental conservation.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1582719471384-894fbb16e074?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Environmental</span>
+                            <h3 class="program-title">Waste Management and Recycling</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Monthly</span>
+                                <span><i class="far fa-user"></i> 35 participants</span>
+                            </div>
+                            <p class="program-description">Monthly activities focused on proper waste management and recycling initiatives.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Environmental</span>
+                            <h3 class="program-title">Poster Making Contest</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> June 2025</span>
+                                <span><i class="far fa-user"></i> 25 participants</span>
+                            </div>
+                            <p class="program-description">Annual poster making contest with environmental themes to raise awareness.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                    <div class="program-card">
+                        <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+                        <div class="program-content">
+                            <span class="program-category">Environmental</span>
+                            <h3 class="program-title">Youth Climate Forums</h3>
+                            <div class="program-meta">
+                                <span><i class="far fa-calendar"></i> Bi-monthly</span>
+                                <span><i class="far fa-user"></i> 30 participants</span>
+                            </div>
+                            <p class="program-description">Bi-monthly forums discussing climate change and environmental issues affecting our community.</p>
+                            <a href="#" class="btn btn-outline">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Program Registration Form -->
+            <div class="form-container">
+                <h3>Program Registration</h3>
+                <p>Register for a youth program by filling out the form below:</p>
+                
+                <form id="program-registration-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="program-category">Program Category</label>
+                            <select class="form-control" id="program-category" required>
+                                <option value="">Choose a category...</option>
+                                <option value="sports">Sports & Recreation</option>
+                                <option value="education">Education & Workshops</option>
+                                <option value="health">Health & Wellness</option>
+                                <option value="environment">Environmental</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="program-type">Program Type</label>
+                            <select class="form-control" id="program-type" required>
+                                <option value="">Select category first...</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="participant-name">Full Name</label>
+                            <input type="text" class="form-control" id="participant-name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="participant-age">Age</label>
+                            <input type="number" class="form-control" id="participant-age" min="15" max="30" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="participant-contact">Contact Number</label>
+                            <input type="tel" class="form-control" id="participant-contact" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="participant-address">Address</label>
+                            <input type="text" class="form-control" id="participant-address" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="emergency-contact">Emergency Contact Person</label>
+                            <input type="text" class="form-control" id="emergency-contact" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="emergency-number">Emergency Contact Number</label>
+                            <input type="tel" class="form-control" id="emergency-number" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn">Register for Program</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Participants Page Content -->
+        <div id="participants-content" class="page-content hidden">
+            <section class="section-title">
+                <h2>Program Participants</h2>
+                <p>Manage and view all youth participants in Barangay Longos programs</p>
+            </section>
+            
+            <div class="form-container">
+                <div class="admin-controls admin-only">
+                    <button class="btn" id="add-participant-btn">Add New Participant</button>
+                    <button class="btn btn-outline" id="export-participants-btn">Export to CSV</button>
+                </div>
+                
+                <div class="filter-controls">
+                    <select id="program-filter">
+                        <option value="">All Programs</option>
+                        <option value="sports">Sports & Recreation</option>
+                        <option value="education">Education & Workshops</option>
+                        <option value="health">Health & Wellness</option>
+                        <option value="environment">Environmental</option>
+                    </select>
+                    
+                    <select id="status-filter">
+                        <option value="">All Statuses</option>
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    
+                    <input type="text" id="search-participants" placeholder="Search participants...">
+                </div>
+                
+                <table id="participants-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Contact</th>
+                            <th>Program</th>
+                            <th>Registration Date</th>
+                            <th>Status</th>
+                            <th class="admin-only">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Participants will be loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- User Reports Page Content -->
+        <div id="user-report-content" class="page-content hidden">
+            <section class="section-title">
+                <h2>Submit a Report</h2>
+                <p>Report issues, concerns, or suggestions to help improve our youth programs</p>
+            </section>
+            
+            <div class="user-report-form">
+                <form id="user-report-form">
+                    <div class="form-group">
+                        <label for="report-title">Report Title</label>
+                        <input type="text" class="form-control" id="report-title" placeholder="Brief description of your concern" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Report Category</label>
+                        <div class="report-type-selector">
+                            <div class="report-type-option" data-type="program">
+                                <div class="report-type-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div>Program Issue</div>
+                            </div>
+                            <div class="report-type-option" data-type="facility">
+                                <div class="report-type-icon">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <div>Facility Problem</div>
+                            </div>
+                            <div class="report-type-option" data-type="suggestion">
+                                <div class="report-type-icon">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <div>Suggestion</div>
+                            </div>
+                            <div class="report-type-option" data-type="other">
+                                <div class="report-type-icon">
+                                    <i class="fas fa-question-circle"></i>
+                                </div>
+                                <div>Other</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="report-category" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="report-message">Message</label>
+                        <textarea class="report-message" id="report-message" placeholder="Please provide detailed information about your concern or suggestion..." required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reporter-name">Your Name (Optional)</label>
+                            <input type="text" class="form-control" id="reporter-name" placeholder="If you'd like to be contacted">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reporter-contact">Contact Info (Optional)</label>
+                            <input type="text" class="form-control" id="reporter-contact" placeholder="Email or phone number">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn">Submit Report</button>
+                </form>
+            </div>
+            
+            <div class="form-container">
+                <h3>Recent Reports</h3>
+                <p>Your previously submitted reports:</p>
+                <div id="user-reports-list">
+                    <!-- User reports will be displayed here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Admin Reports Page Content -->
+        <div id="reports-content" class="page-content hidden">
+            <section class="section-title">
+                <h2>User Reports</h2>
+                <p>Review and manage reports submitted by users</p>
+            </section>
+            
+            <div class="form-container">
+                <div class="admin-controls">
+                    <button class="btn" id="refresh-reports-btn">Refresh Reports</button>
+                    <button class="btn btn-outline" id="export-reports-btn">Export Reports</button>
+                </div>
+                
+                <div class="filter-controls">
+                    <select id="report-status-filter">
+                        <option value="">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                    
+                    <select id="report-category-filter">
+                        <option value="">All Categories</option>
+                        <option value="program">Program Issue</option>
+                        <option value="facility">Facility Problem</option>
+                        <option value="suggestion">Suggestion</option>
+                        <option value="other">Other</option>
+                    </select>
+                    
+                    <input type="text" id="search-reports" placeholder="Search reports...">
+                </div>
+                
+                <div id="reports-list">
+                    <!-- Reports will be loaded here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Announcements Page Content -->
+        <div id="announcements-content" class="page-content hidden">
+            <section class="section-title">
+                <h2>Announcements</h2>
+                <p>Latest news and updates from Barangay Longos</p>
+            </section>
+            
+            <!-- Volleyball Try-outs Announcement -->
+            <div class="tryout-announcement">
+                <div class="tryout-header">
+                    <h3>SANGGUNIANG KABATAAN NG BARANGAY LONGOS</h3>
+                    <p class="subtitle">WOMEN'S & MEN'S VOLLEYBALL TRY-OUTS</p>
+                </div>
+                <div class="tryout-body">
+                    <div class="tryout-details">
+                        <div class="tryout-detail">
+                            <i class="far fa-calendar-alt"></i>
+                            <div>
+                                <strong>Date:</strong> October 14, 2025<br>
+                                <strong>Time:</strong> 5:00 PM onwards
+                            </div>
+                        </div>
+                        <div class="tryout-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong>Venue:</strong> Barangay Longos Covered Court
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tryout-requirements">
+                        <h4>Requirements:</h4>
+                        <ul>
+                            <li>Female & Male players aged 18 to 30 years old</li>
+                            <li>Registered voter of Barangay Longos for at least 6 months</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tryout-slogan">
+                        REPRESENT BARANGAY LONGOS AND BRING PRIDE TO OUR COMMUNITY!
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Basketball Try-outs Announcement -->
+            <div class="tryout-announcement">
+                <div class="tryout-header">
+                    <h3>SANGGUNIANG KABATAAN NG BARANGAY LONGOS</h3>
+                    <p class="subtitle">BASKETBALL TRY-OUTS</p>
+                </div>
+                <div class="tryout-body">
+                    <div class="tryout-details">
+                        <div class="tryout-detail">
+                            <i class="far fa-calendar-alt"></i>
+                            <div>
+                                <strong>Date:</strong> October 10, 2025<br>
+                                <strong>Time:</strong> 8:00 - 10:00 PM
+                            </div>
+                        </div>
+                        <div class="tryout-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong>Venue:</strong> Barangay Longos Covered Court
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tryout-requirements">
+                        <h4>Requirements:</h4>
+                        <ul>
+                            <li>Male players aged 18 to 30 years old</li>
+                            <li>Registered voter of Barangay Longos for at least 6 months</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tryout-slogan">
+                        REPRESENT BARANGAY LONGOS AND BRING PRIDE TO OUR COMMUNITY!
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Regular Announcements -->
+            <div class="announcements-list">
+                <div class="announcement-item">
+                    <div class="announcement-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div class="announcement-content">
+                        <h4>Registration for Basketball Tournament Now Open</h4>
+                        <p>Youth aged 15-21 can now register for the annual basketball tournament. Visit the barangay hall or register online through our website.</p>
+                        <div class="announcement-date">September 5, 2025</div>
+                    </div>
+                </div>
+                
+                <div class="announcement-item">
+                    <div class="announcement-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="announcement-content">
+                        <h4>SK Meeting Schedule for September 2025</h4>
+                        <p>The Sangguniang Kabataan will hold its regular meetings every Saturday of September at the Barangay Hall from 2:00 PM to 4:00 PM.</p>
+                        <div class="announcement-date">September 1, 2025</div>
+                    </div>
+                </div>
+                
+                <div class="announcement-item">
+                    <div class="announcement-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="announcement-content">
+                        <h4>Recognition Day for Outstanding Youth</h4>
+                        <p>Join us on September 30, 2025 as we recognize outstanding youth contributors in Barangay Longos for their achievements and community service.</p>
+                        <div class="announcement-date">August 28, 2025</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Page Content -->
+        <div id="contact-content" class="page-content hidden">
+            <section class="section-title">
+                <h2>Contact Us</h2>
+                <p>Get in touch with Barangay Longos officials</p>
+            </section>
+            
+            <div class="form-container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h3>Barangay Longos Office</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> Longos, Malabon, Philippines 1472</p>
+                        <p><i class="fas fa-phone"></i> (02) 1234-5678</p>
+                        <p><i class="fas fa-envelope"></i> sangguniankabataan.brgylongos@gmail.com</p>
+                        <p><i class="fas fa-clock"></i> Office Hours: Monday-Friday, 8:00 AM - 5:00 PM</p>
+                        
+                        <h4 style="margin-top: 30px;">SK Chairperson</h4>
+                        <p><strong>Irish S. Evangelista</strong></p>
+                        <p><i class="fas fa-envelope"></i> irish.evangelista@brgylongos.gov.ph</p>
+                    </div>
+                    
+                    <div class="about-text">
+                        <h3>Send Us a Message</h3>
+                        <form id="contact-form">
+                            <div class="form-group">
+                                <label for="contact-name">Your Name</label>
+                                <input type="text" class="form-control" id="contact-name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contact-email">Email Address</label>
+                                <input type="email" class="form-control" id="contact-email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contact-subject">Subject</label>
+                                <input type="text" class="form-control" id="contact-subject" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contact-message">Message</label>
+                                <textarea class="form-control" id="contact-message" rows="5" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Barangay Longos</h3>
+                    <p>Youth Program Management and Participation System for Barangay Longos, Malabon City.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#" data-page="home">Home</a></li>
+                        <li><a href="#" data-page="about">About Us</a></li>
+                        <li><a href="#" data-page="programs">Programs</a></li>
+                        <li><a href="#" data-page="user-report">Submit Report</a></li>
+                        <li><a href="#" data-page="announcements">Announcements</a></li>
+                        <li><a href="#" data-page="contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Program Categories</h3>
+                    <ul>
+                        <li><a href="#">Sports & Recreation</a></li>
+                        <li><a href="#">Education & Workshops</a></li>
+                        <li><a href="#">Health & Wellness</a></li>
+                        <li><a href="#">Environmental Projects</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Longos, Malabon, Philippines 1472</li>
+                        <li><i class="fas fa-phone"></i> (02) 1234-5678</li>
+                        <li><i class="fas fa-envelope"></i> sangguniankabataan.brgylongos@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Barangay Longos Youth Program Management System. All Rights Reserved.</p>
+                <p>BSIT-3E Group - Datamex College of Saint Adeline, Inc.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // Simple localStorage setup
+    function initializeApp() {
+        // Initialize admin credentials if not exists
+        if (!localStorage.getItem('adminPassword')) {
+            localStorage.setItem('adminPassword', 'admin12345');
+        }
+        
+        // Initialize participants if not exists
+        if (!localStorage.getItem('participants')) {
+            localStorage.setItem('participants', JSON.stringify([]));
+        }
+        
+        // Initialize user reports if not exists
+        if (!localStorage.getItem('userReports')) {
+            localStorage.setItem('userReports', JSON.stringify([]));
+        }
+        
+        // Initialize programs if not exists
+        if (!localStorage.getItem('programs')) {
+            const defaultPrograms = [
+                {
+                    id: 1,
+                    name: 'Basketball Tournament 2025',
+                    category: 'sports',
+                    type: 'basketball',
+                    description: 'Annual inter-zone basketball competition for youth aged 15-21. Prizes for winning teams and skills challenges.',
+                    startDate: '2025-09-15',
+                    endDate: '2025-10-20',
+                    maxParticipants: 45,
+                    currentParticipants: 12,
+                    status: 'active'
+                },
+                {
+                    id: 2,
+                    name: 'Digital Literacy Workshop',
+                    category: 'education',
+                    type: 'digital-literacy',
+                    description: 'Learn essential digital skills including computer basics, internet safety, and productivity tools.',
+                    startDate: '2025-08-10',
+                    endDate: '2025-08-30',
+                    maxParticipants: 32,
+                    currentParticipants: 25,
+                    status: 'active'
+                },
+                {
+                    id: 3,
+                    name: 'Community Clean-up Drive',
+                    category: 'environment',
+                    type: 'cleanup',
+                    description: 'Join fellow youth in cleaning up public spaces and promoting environmental awareness in our community.',
+                    startDate: '2025-07-05',
+                    endDate: '2025-07-05',
+                    maxParticipants: 78,
+                    currentParticipants: 45,
+                    status: 'active'
+                }
+            ];
+            localStorage.setItem('programs', JSON.stringify(defaultPrograms));
+        }
+    }
+
+    // Check if user is logged in
+    function isLoggedIn() {
+        return localStorage.getItem('isLoggedIn') === 'true';
+    }
+
+    // Get current user
+    function getCurrentUser() {
+        const userData = localStorage.getItem('currentUser');
+        return userData ? JSON.parse(userData) : null;
+    }
+
+    // Program types by category
+    const programTypes = {
+        sports: [
+            { value: 'basketball', label: 'Basketball' },
+            { value: 'volleyball', label: 'Volleyball' }
+        ],
+        education: [
+            { value: 'youth-lectures', label: 'Youth Lectures' },
+            { value: 'youth-seminars', label: 'Youth Seminars' },
+            { value: 'free-tutoring', label: 'Free Tutoring Session' },
+            { value: 'scholarship-assistance', label: 'Scholarship Assistance' },
+            { value: 'reading-programs', label: 'Reading Programs' }
+        ],
+        health: [
+            { value: 'wellness-seminars', label: 'Youth Wellness Seminars' },
+            { value: 'journaling-workshops', label: 'Journaling Workshops' },
+            { value: 'nutrition-month', label: 'Nutrition Month Activity' },
+            { value: 'gardening-wellness', label: 'Gardening For Wellness' },
+            { value: 'fun-runs', label: 'Fun Runs' }
+        ],
+        environment: [
+            { value: 'tree-planting', label: 'Tree Planting' },
+            { value: 'waste-management', label: 'Waste Management and Recycling' },
+            { value: 'poster-contest', label: 'Poster Making Contest' },
+            { value: 'climate-forums', label: 'Youth Climate Forums' }
+        ]
+    };
+    
+    // Page Navigation
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize app
+        initializeApp();
+        
+        // Initialize UI based on user state
+        updateAuthUI();
+        
+        // Load participants table
+        loadParticipantsTable();
+        
+        // Load user reports if on reports page
+        if (document.getElementById('reports-content') && !document.getElementById('reports-content').classList.contains('hidden')) {
+            loadUserReports();
+        }
+        
+        // Load user's own reports if on user report page
+        if (document.getElementById('user-report-content') && !document.getElementById('user-report-content').classList.contains('hidden')) {
+            loadUserSubmittedReports();
+        }
+        
+        // Show home page by default
+        document.getElementById('home-content').classList.remove('hidden');
+        
+        // Navigation click handler
+        const navLinks = document.querySelectorAll('nav a, .footer-column a');
+        const pageContents = document.querySelectorAll('.page-content');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetPage = this.getAttribute('data-page');
+                
+                if (targetPage) {
+                    // Hide all page contents
+                    pageContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Show target page
+                    const targetElement = document.getElementById(targetPage + '-content');
+                    if (targetElement) {
+                        targetElement.classList.remove('hidden');
+                    } else {
+                        console.error('Page not found:', targetPage);
+                        document.getElementById('home-content').classList.remove('hidden');
+                    }
+                    
+                    // Update active nav link
+                    document.querySelectorAll('nav a').forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    
+                    if (this.parentElement.parentElement.tagName === 'NAV') {
+                        this.classList.add('active');
+                    }
+                    
+                    // Load participants table if on participants page
+                    if (targetPage === 'participants') {
+                        loadParticipantsTable();
+                    }
+                    
+                    // Load user reports if on reports page
+                    if (targetPage === 'reports') {
+                        loadUserReports();
+                    }
+                    
+                    // Load user's own reports if on user report page
+                    if (targetPage === 'user-report') {
+                        loadUserSubmittedReports();
+                    }
+                }
+            });
+        });
+        
+        // Modal functionality
+        const loginBtn = document.getElementById('loginBtn');
+        const heroRegisterBtn = document.getElementById('hero-register-btn');
+        const closeLoginModal = document.getElementById('close-login-modal');
+        const closeForgotPasswordModal = document.getElementById('close-forgot-password-modal');
+        const closeEditParticipantModal = document.getElementById('close-edit-participant-modal');
+        const closeChangePasswordModal = document.getElementById('close-change-password');
+        const loginModal = document.getElementById('login-modal');
+        const forgotPasswordModal = document.getElementById('forgot-password-modal');
+        const editParticipantModal = document.getElementById('edit-participant-modal');
+        const changePasswordModal = document.getElementById('change-password-modal');
+        
+        // Open modals
+        loginBtn.addEventListener('click', function() {
+            loginModal.classList.add('active');
+        });
+        
+        heroRegisterBtn.addEventListener('click', function() {
+            // Navigate to programs page for registration
+            document.querySelectorAll('.page-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById('programs-content').classList.remove('hidden');
+            
+            // Update nav
+            document.querySelectorAll('nav a').forEach(navLink => {
+                navLink.classList.remove('active');
+            });
+            document.querySelector('nav a[data-page="programs"]').classList.add('active');
+        });
+        
+        // Close modals
+        closeLoginModal.addEventListener('click', function() {
+            loginModal.classList.remove('active');
+        });
+        
+        closeForgotPasswordModal.addEventListener('click', function() {
+            forgotPasswordModal.classList.remove('active');
+        });
+        
+        closeEditParticipantModal.addEventListener('click', function() {
+            editParticipantModal.classList.remove('active');
+        });
+        
+        closeChangePasswordModal.addEventListener('click', function() {
+            changePasswordModal.classList.remove('active');
+        });
+        
+        document.getElementById('cancel-edit-btn').addEventListener('click', function() {
+            editParticipantModal.classList.remove('active');
+        });
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === loginModal) {
+                loginModal.classList.remove('active');
+            }
+            if (e.target === forgotPasswordModal) {
+                forgotPasswordModal.classList.remove('active');
+            }
+            if (e.target === editParticipantModal) {
+                editParticipantModal.classList.remove('active');
+            }
+            if (e.target === changePasswordModal) {
+                changePasswordModal.classList.remove('active');
+            }
+        });
+        
+        // Forgot password functionality
+        document.getElementById('forgot-password-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            loginModal.classList.remove('active');
+            forgotPasswordModal.classList.add('active');
+        });
+        
+        document.getElementById('back-to-login-modal').addEventListener('click', function(e) {
+            e.preventDefault();
+            forgotPasswordModal.classList.remove('active');
+            loginModal.classList.add('active');
+        });
+        
+        // Change password functionality
+        document.getElementById('change-password-btn').addEventListener('click', function() {
+            changePasswordModal.classList.add('active');
+        });
+        
+        // Logout button
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            logout();
+        });
+        
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const contentElement = document.getElementById(tabId + '-programs');
+                if (contentElement) {
+                    contentElement.classList.add('active');
+                }
+            });
+        });
+        
+        // Password toggle functionality
+        document.getElementById('login-password-toggle').addEventListener('click', function() {
+            togglePasswordVisibility('password', this);
+        });
+        
+        document.getElementById('new-password-toggle').addEventListener('click', function() {
+            togglePasswordVisibility('new-password', this);
+        });
+        
+        document.getElementById('confirm-new-password-toggle').addEventListener('click', function() {
+            togglePasswordVisibility('confirm-new-password', this);
+        });
+        
+        document.getElementById('new-password-reset-toggle').addEventListener('click', function() {
+            togglePasswordVisibility('new-password-reset', this);
+        });
+        
+        document.getElementById('confirm-new-password-reset-toggle').addEventListener('click', function() {
+            togglePasswordVisibility('confirm-new-password-reset', this);
+        });
+        
+        // Password strength indicator
+        document.getElementById('new-password').addEventListener('input', function() {
+            checkPasswordStrength(this.value, 'new-password-strength');
+        });
+        
+        document.getElementById('new-password-reset').addEventListener('input', function() {
+            checkPasswordStrength(this.value, 'new-password-reset-strength');
+        });
+        
+        // Program category change handler
+        document.getElementById('program-category').addEventListener('change', function() {
+            updateProgramTypes(this.value, 'program-type');
+        });
+        
+        document.getElementById('edit-program-category').addEventListener('change', function() {
+            updateProgramTypes(this.value, 'edit-program-type');
+        });
+        
+        // Report type selection
+        document.querySelectorAll('.report-type-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.report-type-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                document.getElementById('report-category').value = this.getAttribute('data-type');
+            });
+        });
+        
+        // Form submissions
+        document.getElementById('program-registration-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            registerParticipant();
+        });
+        
+        document.getElementById('edit-participant-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            updateParticipant();
+        });
+        
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showToast('Your message has been sent successfully!');
+            this.reset();
+        });
+        
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleLogin();
+        });
+        
+        document.getElementById('forgot-password-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleForgotPassword();
+        });
+        
+        document.getElementById('change-password-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleChangePassword();
+        });
+        
+        document.getElementById('user-report-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitUserReport();
+        });
+        
+        // Report generation
+        document.getElementById('generate-report-btn').addEventListener('click', function() {
+            generateReport();
+        });
+        
+        // Export buttons
+        document.getElementById('export-pdf-btn').addEventListener('click', function() {
+            showToast('PDF export functionality would be implemented here');
+        });
+        
+        document.getElementById('export-excel-btn').addEventListener('click', function() {
+            showToast('Excel export functionality would be implemented here');
+        });
+        
+        document.getElementById('export-participants-btn').addEventListener('click', function() {
+            showToast('CSV export functionality would be implemented here');
+        });
+        
+        document.getElementById('export-reports-btn').addEventListener('click', function() {
+            showToast('Reports export functionality would be implemented here');
+        });
+        
+        // Refresh reports button
+        document.getElementById('refresh-reports-btn').addEventListener('click', function() {
+            loadUserReports();
+        });
+        
+        // Filter functionality
+        document.getElementById('program-filter').addEventListener('change', function() {
+            loadParticipantsTable();
+        });
+        
+        document.getElementById('status-filter').addEventListener('change', function() {
+            loadParticipantsTable();
+        });
+        
+        document.getElementById('search-participants').addEventListener('input', function() {
+            loadParticipantsTable();
+        });
+        
+        document.getElementById('report-status-filter').addEventListener('change', function() {
+            loadUserReports();
+        });
+        
+        document.getElementById('report-category-filter').addEventListener('change', function() {
+            loadUserReports();
+        });
+        
+        document.getElementById('search-reports').addEventListener('input', function() {
+            loadUserReports();
+        });
+        
+        // Add participant button
+        document.getElementById('add-participant-btn').addEventListener('click', function() {
+            // Navigate to programs page
+            document.querySelectorAll('.page-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById('programs-content').classList.remove('hidden');
+            
+            // Update nav
+            document.querySelectorAll('nav a').forEach(navLink => {
+                navLink.classList.remove('active');
+            });
+            document.querySelector('nav a[data-page="programs"]').classList.add('active');
+        });
+    });
+    
+    // Function to update program types based on selected category
+    function updateProgramTypes(category, targetElementId) {
+        const programTypeSelect = document.getElementById(targetElementId);
+        
+        // Clear existing options
+        programTypeSelect.innerHTML = '<option value="">Select program type...</option>';
+        
+        // Add options for selected category
+        if (category && programTypes[category]) {
+            programTypes[category].forEach(type => {
+                const option = document.createElement('option');
+                option.value = type.value;
+                option.textContent = type.label;
+                programTypeSelect.appendChild(option);
+            });
+        }
+    }
+    
+    // Function to toggle password visibility
+    function togglePasswordVisibility(passwordFieldId, toggleButton) {
+        const passwordField = document.getElementById(passwordFieldId);
+        const icon = toggleButton.querySelector('i');
+        
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+    
+    // Function to check password strength
+    function checkPasswordStrength(password, strengthBarId = 'password-strength') {
+        const strengthBar = document.getElementById(strengthBarId);
+        
+        // Reset
+        strengthBar.className = 'password-strength';
+        
+        if (password.length === 0) {
+            return;
+        }
+        
+        // Check password strength
+        let strength = 0;
+        let hasLower = /[a-z]/.test(password);
+        let hasUpper = /[A-Z]/.test(password);
+        let hasNumbers = /\d/.test(password);
+        let hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+        
+        if (password.length >= 8) strength++;
+        if (hasLower) strength++;
+        if (hasUpper) strength++;
+        if (hasNumbers) strength++;
+        if (hasSpecial) strength++;
+        
+        // Update strength bar
+        if (strength <= 2) {
+            strengthBar.className = 'password-strength weak';
+        } else if (strength === 3) {
+            strengthBar.className = 'password-strength fair';
+        } else if (strength === 4) {
+            strengthBar.className = 'password-strength good';
+        } else {
+            strengthBar.className = 'password-strength strong';
+        }
+    }
+    
+    // Function to handle login - SIMPLIFIED AND FIXED
+    function handleLogin() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        // Simple validation
+        if (!username || !password) {
+            showToast('Please fill in all fields', 'error');
+            return;
+        }
+        
+        // Check credentials - SIMPLE AND DIRECT
+        if (username === 'admin' && password === localStorage.getItem('adminPassword')) {
+            showToast('Login successful!');
+            
+            // Set current user
+            const currentUser = {
+                id: 1,
+                username: 'admin',
+                email: 'admin@brgylongos.gov.ph',
+                firstName: 'System',
+                lastName: 'Administrator',
+                role: 'admin'
+            };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            localStorage.setItem('isLoggedIn', 'true');
+            
+            updateAuthUI();
+            
+            // Close modal
+            document.getElementById('login-modal').classList.remove('active');
+            document.getElementById('login-form').reset();
+            
+            // Reload participants table
+            loadParticipantsTable();
+        } else {
+            showToast('Invalid credentials. Please try again.', 'error');
+        }
+    }
+    
+    // Function to handle forgot password
+    function handleForgotPassword() {
+        const currentPassword = document.getElementById('current-password-reset').value;
+        const newPassword = document.getElementById('new-password-reset').value;
+        const confirmNewPassword = document.getElementById('confirm-new-password-reset').value;
+        const errorElement = document.getElementById('confirm-new-password-reset-error');
+        
+        // Validation
+        if (!currentPassword || !newPassword || !confirmNewPassword) {
+            showToast('Please fill in all fields', 'error');
+            return;
+        }
+        
+        if (newPassword !== confirmNewPassword) {
+            errorElement.textContent = 'New passwords do not match';
+            return;
+        } else {
+            errorElement.textContent = '';
+        }
+        
+        if (newPassword.length < 8) {
+            showToast('New password must be at least 8 characters long', 'error');
+            return;
+        }
+        
+        // Check if current password is correct
+        if (currentPassword !== localStorage.getItem('adminPassword')) {
+            showToast('Current password is incorrect', 'error');
+            return;
+        }
+        
+        // Update password
+        localStorage.setItem('adminPassword', newPassword);
+        showToast('Password reset successfully!');
+        document.getElementById('forgot-password-modal').classList.remove('active');
+        document.getElementById('forgot-password-form').reset();
+        
+        // Go back to login
+        document.getElementById('login-modal').classList.add('active');
+    }
+    
+    // Function to handle change password
+    function handleChangePassword() {
+        const currentPassword = document.getElementById('current-password').value;
+        const newPassword = document.getElementById('new-password').value;
+        const confirmNewPassword = document.getElementById('confirm-new-password').value;
+        const errorElement = document.getElementById('confirm-new-password-error');
+        
+        // Validation
+        if (!currentPassword || !newPassword || !confirmNewPassword) {
+            showToast('Please fill in all fields', 'error');
+            return;
+        }
+        
+        if (newPassword !== confirmNewPassword) {
+            errorElement.textContent = 'New passwords do not match';
+            return;
+        } else {
+            errorElement.textContent = '';
+        }
+        
+        if (newPassword.length < 8) {
+            showToast('New password must be at least 8 characters long', 'error');
+            return;
+        }
+        
+        // Check if current password is correct
+        if (currentPassword !== localStorage.getItem('adminPassword')) {
+            showToast('Current password is incorrect', 'error');
+            return;
+        }
+        
+        // Update password
+        localStorage.setItem('adminPassword', newPassword);
+        showToast('Password updated successfully!');
+        document.getElementById('change-password-modal').classList.remove('active');
+        document.getElementById('change-password-form').reset();
+    }
+    
+    // Function to register a participant
+    function registerParticipant() {
+        const programCategory = document.getElementById('program-category');
+        const programType = document.getElementById('program-type');
+        const participantName = document.getElementById('participant-name').value;
+        const participantAge = document.getElementById('participant-age').value;
+        const participantContact = document.getElementById('participant-contact').value;
+        const participantAddress = document.getElementById('participant-address').value;
+        const emergencyContact = document.getElementById('emergency-contact').value;
+        const emergencyNumber = document.getElementById('emergency-number').value;
+        
+        // Validate form
+        if (!programCategory.value || !programType.value || !participantName || !participantAge || 
+            !participantContact || !participantAddress || !emergencyContact || !emergencyNumber) {
+            showToast('Please fill in all required fields', 'error');
+            return;
+        }
+        
+        // Get existing participants
+        const participants = JSON.parse(localStorage.getItem('participants') || '[]');
+        
+        // Add new participant
+        const newParticipant = {
+            id: participants.length > 0 ? Math.max(...participants.map(p => p.id)) + 1 : 1,
+            name: participantName,
+            age: participantAge,
+            contact: participantContact,
+            address: participantAddress,
+            emergencyContact: emergencyContact,
+            emergencyNumber: emergencyNumber,
+            programCategory: programCategory.value,
+            programType: programType.value,
+            registrationDate: new Date().toISOString().split('T')[0],
+            status: 'active'
+        };
+        
+        participants.push(newParticipant);
+        localStorage.setItem('participants', JSON.stringify(participants));
+        
+        // Show success message
+        showToast(`Successfully registered ${participantName} for ${programType.options[programType.selectedIndex].text}!`);
+        
+        // Reset the form
+        document.getElementById('program-registration-form').reset();
+        document.getElementById('program-type').innerHTML = '<option value="">Select category first...</option>';
+        
+        // Reload participants table
+        loadParticipantsTable();
+    }
+    
+    // Function to load participants table
+    function loadParticipantsTable() {
+        const tableBody = document.querySelector('#participants-table tbody');
+        tableBody.innerHTML = '';
+        
+        const participants = JSON.parse(localStorage.getItem('participants') || '[]');
+        
+        // Apply filters
+        const programFilter = document.getElementById('program-filter').value;
+        const statusFilter = document.getElementById('status-filter').value;
+        const searchTerm = document.getElementById('search-participants').value.toLowerCase();
+        
+        let filteredParticipants = participants;
+        
+        if (programFilter) {
+            filteredParticipants = filteredParticipants.filter(p => p.programCategory === programFilter);
+        }
+        
+        if (statusFilter) {
+            filteredParticipants = filteredParticipants.filter(p => p.status === statusFilter);
+        }
+        
+        if (searchTerm) {
+            filteredParticipants = filteredParticipants.filter(p => 
+                p.name.toLowerCase().includes(searchTerm) || 
+                p.contact.includes(searchTerm)
+            );
+        }
+        
+        // Set view-only mode for non-admin users
+        const participantsTable = document.getElementById('participants-table');
+        if (!isLoggedIn()) {
+            participantsTable.classList.add('view-only');
+        } else {
+            participantsTable.classList.remove('view-only');
+        }
+        
+        // Populate table
+        filteredParticipants.forEach(participant => {
+            const programType = getProgramTypeLabel(participant.programCategory, participant.programType);
+            
+            const row = document.createElement('tr');
+            
+            // Determine if user can edit this participant
+            const canEdit = isLoggedIn();
+            
+            row.innerHTML = `
+                <td>YL-${participant.id.toString().padStart(3, '0')}</td>
+                <td>${participant.name}</td>
+                <td>${participant.age}</td>
+                <td>${participant.contact}</td>
+                <td>${programType}</td>
+                <td>${participant.registrationDate}</td>
+                <td><span class="status-badge status-active">${participant.status}</span></td>
+                ${canEdit ? 
+                    `<td class="action-buttons">
+                        <button class="action-btn edit-btn" data-id="${participant.id}">Edit</button>
+                        <button class="action-btn delete-btn" data-id="${participant.id}">Delete</button>
+                    </td>` : 
+                    '<td></td>'
+                }
+            `;
+            
+            tableBody.appendChild(row);
+        });
+        
+        // Add event listeners for action buttons
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const participantId = this.getAttribute('data-id');
+                editParticipant(participantId);
+            });
+        });
+        
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const participantId = this.getAttribute('data-id');
+                deleteParticipant(participantId);
+            });
+        });
+    }
+    
+    // Function to get program type label
+    function getProgramTypeLabel(category, type) {
+        if (programTypes[category]) {
+            const program = programTypes[category].find(p => p.value === type);
+            return program ? program.label : type;
+        }
+        return type;
+    }
+    
+    // Function to edit a participant
+    function editParticipant(id) {
+        const participants = JSON.parse(localStorage.getItem('participants') || '[]');
+        const participant = participants.find(p => p.id === parseInt(id));
+        
+        if (participant) {
+            // Check if user has permission to edit
+            if (!isLoggedIn()) {
+                showToast('Only administrators can edit participants', 'error');
+                return;
+            }
+            
+            // Populate the edit form
+            document.getElementById('edit-participant-id').value = participant.id;
+            document.getElementById('edit-participant-name').value = participant.name;
+            document.getElementById('edit-participant-age').value = participant.age;
+            document.getElementById('edit-participant-contact').value = participant.contact;
+            document.getElementById('edit-participant-address').value = participant.address;
+            document.getElementById('edit-program-category').value = participant.programCategory;
+            document.getElementById('edit-emergency-contact').value = participant.emergencyContact;
+            document.getElementById('edit-emergency-number').value = participant.emergencyNumber;
+            document.getElementById('edit-participant-status').value = participant.status;
+            
+            // Update program types based on category
+            updateProgramTypes(participant.programCategory, 'edit-program-type');
+            
+            // Set the program type after a short delay to ensure options are populated
+            setTimeout(() => {
+                document.getElementById('edit-program-type').value = participant.programType;
+            }, 100);
+            
+            // Show the edit modal
+            document.getElementById('edit-participant-modal').classList.add('active');
+        }
+    }
+    
+    // Function to update a participant
+    function updateParticipant() {
+        const participantId = parseInt(document.getElementById('edit-participant-id').value);
+        const name = document.getElementById('edit-participant-name').value;
+        const age = document.getElementById('edit-participant-age').value;
+        const contact = document.getElementById('edit-participant-contact').value;
+        const address = document.getElementById('edit-participant-address').value;
+        const programCategory = document.getElementById('edit-program-category').value;
+        const programType = document.getElementById('edit-program-type').value;
+        const emergencyContact = document.getElementById('edit-emergency-contact').value;
+        const emergencyNumber = document.getElementById('edit-emergency-number').value;
+        const status = document.getElementById('edit-participant-status').value;
+        
+        // Get participants and update
+        const participants = JSON.parse(localStorage.getItem('participants') || '[]');
+        const index = participants.findIndex(p => p.id === participantId);
+        
+        if (index !== -1) {
+            participants[index] = { 
+                ...participants[index], 
+                name, 
+                age, 
+                contact, 
+                address, 
+                programCategory, 
+                programType, 
+                emergencyContact, 
+                emergencyNumber, 
+                status 
+            };
+            
+            localStorage.setItem('participants', JSON.stringify(participants));
+            showToast('Participant updated successfully');
+            loadParticipantsTable();
+            document.getElementById('edit-participant-modal').classList.remove('active');
+        } else {
+            showToast('Error updating participant', 'error');
+        }
+    }
+    
+    // Function to delete a participant
+    function deleteParticipant(id) {
+        const participants = JSON.parse(localStorage.getItem('participants') || '[]');
+        const participant = participants.find(p => p.id === parseInt(id));
+        
+        if (participant && confirm(`Are you sure you want to delete ${participant.name}?`)) {
+            const updatedParticipants = participants.filter(p => p.id !== parseInt(id));
+            localStorage.setItem('participants', JSON.stringify(updatedParticipants));
+            showToast('Participant deleted successfully');
+            loadParticipantsTable();
+        }
+    }
+    
+    // Function to submit a user report
+    function submitUserReport() {
+        const title = document.getElementById('report-title').value;
+        const category = document.getElementById('report-category').value;
+        const message = document.getElementById('report-message').value;
+        const reporterName = document.getElementById('reporter-name').value;
+        const reporterContact = document.getElementById('reporter-contact').value;
+        
+        // Validate form
+        if (!title || !category || !message) {
+            showToast('Please fill in all required fields', 'error');
+            return;
+        }
+        
+        // Get existing reports
+        const reports = JSON.parse(localStorage.getItem('userReports') || '[]');
+        
+        // Add new report
+        const newReport = {
+            id: reports.length > 0 ? Math.max(...reports.map(r => r.id)) + 1 : 1,
+            title: title,
+            category: category,
+            message: message,
+            reporterName: reporterName || 'Anonymous',
+            reporterContact: reporterContact || 'Not provided',
+            date: new Date().toISOString(),
+            status: 'pending'
+        };
+        
+        reports.push(newReport);
+        localStorage.setItem('userReports', JSON.stringify(reports));
+        
+        // Show success message
+        showToast('Your report has been submitted successfully!');
+        
+        // Reset the form
+        document.getElementById('user-report-form').reset();
+        document.querySelectorAll('.report-type-option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        
+        // Reload user's reports
+        loadUserSubmittedReports();
+    }
+    
+    // Function to load user reports for admin view
+    function loadUserReports() {
+        const reportsList = document.getElementById('reports-list');
+        reportsList.innerHTML = '';
+        
+        const reports = JSON.parse(localStorage.getItem('userReports') || '[]');
+        
+        // Apply filters
+        const statusFilter = document.getElementById('report-status-filter').value;
+        const categoryFilter = document.getElementById('report-category-filter').value;
+        const searchTerm = document.getElementById('search-reports').value.toLowerCase();
+        
+        let filteredReports = reports;
+        
+        if (statusFilter) {
+            filteredReports = filteredReports.filter(r => r.status === statusFilter);
+        }
+        
+        if (categoryFilter) {
+            filteredReports = filteredReports.filter(r => r.category === categoryFilter);
+        }
+        
+        if (searchTerm) {
+            filteredReports = filteredReports.filter(r => 
+                r.title.toLowerCase().includes(searchTerm) || 
+                r.message.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        // Sort by date (newest first)
+        filteredReports.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Populate reports
+        if (filteredReports.length === 0) {
+            reportsList.innerHTML = '<p>No reports found.</p>';
+            return;
+        }
+        
+        filteredReports.forEach(report => {
+            const reportItem = document.createElement('div');
+            reportItem.className = 'report-item';
+            
+            const statusClass = `status-${report.status.replace('-', '-')}`;
+            
+            reportItem.innerHTML = `
+                <div class="report-header">
+                    <div>
+                        <h4>${report.title}</h4>
+                        <div class="report-meta">
+                            Submitted by: ${report.reporterName} | 
+                            ${new Date(report.date).toLocaleDateString()} | 
+                            Category: ${report.category}
+                        </div>
+                    </div>
+                    <span class="report-status ${statusClass}">${report.status}</span>
+                </div>
+                <div class="report-content">
+                    <p>${report.message}</p>
+                    ${report.reporterContact !== 'Not provided' ? `<p><strong>Contact:</strong> ${report.reporterContact}</p>` : ''}
+                </div>
+                <div class="report-actions">
+                    <button class="action-btn edit-btn" data-id="${report.id}" data-action="in-progress">Mark In Progress</button>
+                    <button class="action-btn delete-btn" data-id="${report.id}" data-action="resolved">Mark Resolved</button>
+                </div>
+            `;
+            
+            reportsList.appendChild(reportItem);
+        });
+        
+        // Add event listeners for action buttons
+        document.querySelectorAll('.report-actions .action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const reportId = this.getAttribute('data-id');
+                const action = this.getAttribute('data-action');
+                updateReportStatus(reportId, action);
+            });
+        });
+    }
+    
+    // Function to load user's own submitted reports
+    function loadUserSubmittedReports() {
+        const userReportsList = document.getElementById('user-reports-list');
+        userReportsList.innerHTML = '';
+        
+        const reports = JSON.parse(localStorage.getItem('userReports') || '[]');
+        
+        // Get reports submitted by the current user (if logged in) or all reports with contact info
+        const userReports = reports.filter(r => 
+            r.reporterContact !== 'Not provided' || 
+            (isLoggedIn() && r.reporterName !== 'Anonymous')
+        );
+        
+        // Sort by date (newest first)
+        userReports.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Populate user's reports
+        if (userReports.length === 0) {
+            userReportsList.innerHTML = '<p>You have not submitted any reports yet.</p>';
+            return;
+        }
+        
+        userReports.forEach(report => {
+            const reportItem = document.createElement('div');
+            reportItem.className = 'report-item';
+            
+            const statusClass = `status-${report.status.replace('-', '-')}`;
+            
+            reportItem.innerHTML = `
+                <div class="report-header">
+                    <div>
+                        <h4>${report.title}</h4>
+                        <div class="report-meta">
+                            Submitted on: ${new Date(report.date).toLocaleDateString()} | 
+                            Category: ${report.category}
+                        </div>
+                    </div>
+                    <span class="report-status ${statusClass}">${report.status}</span>
+                </div>
+                <div class="report-content">
+                    <p>${report.message}</p>
+                </div>
+            `;
+            
+            userReportsList.appendChild(reportItem);
+        });
+    }
+    
+    // Function to update report status
+    function updateReportStatus(reportId, status) {
+        const reports = JSON.parse(localStorage.getItem('userReports') || '[]');
+        const index = reports.findIndex(r => r.id === parseInt(reportId));
+        
+        if (index !== -1) {
+            reports[index].status = status;
+            localStorage.setItem('userReports', JSON.stringify(reports));
+            showToast(`Report status updated to ${status}`);
+            loadUserReports();
+        }
+    }
+    
+    // Function to generate reports
+    function generateReport() {
+        const reportType = document.getElementById('report-type').value;
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        const programFilter = document.getElementById('program-filter-report').value;
+        const customMessage = document.getElementById('report-message').value;
+        
+        if (!reportType) {
+            showToast('Please select a report type', 'error');
+            return;
+        }
+        
+        // Get data based on filters
+        let participants = JSON.parse(localStorage.getItem('participants') || '[]');
+        let programs = JSON.parse(localStorage.getItem('programs') || '[]');
+        
+        if (programFilter) {
+            participants = participants.filter(p => p.programCategory === programFilter);
+            programs = programs.filter(p => p.category === programFilter);
+        }
+        
+        if (startDate && endDate) {
+            participants = participants.filter(p => {
+                const regDate = new Date(p.registrationDate);
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                return regDate >= start && regDate <= end;
+            });
+        }
+        
+        // Generate report content
+        let reportContent = '';
+        
+        switch(reportType) {
+            case 'program':
+                reportContent = generateProgramReport(participants, programs);
+                break;
+            case 'attendance':
+                reportContent = generateAttendanceReport(participants, programs);
+                break;
+            case 'feedback':
+                reportContent = generateFeedbackReport();
+                break;
+            case 'demographic':
+                reportContent = generateDemographicReport(participants);
+                break;
+            case 'custom':
+                reportContent = generateCustomReport(customMessage, participants, programs);
+                break;
+        }
+        
+        // Display report
+        document.getElementById('report-content').innerHTML = reportContent;
+        document.getElementById('report-results').style.display = 'block';
+    }
+    
+    // Function to generate program report
+    function generateProgramReport(participants, programs) {
+        let html = '<h4>Program Participation Report</h4>';
+        html += `<p>Total Participants: ${participants.length}</p>`;
+        html += `<p>Total Programs: ${programs.length}</p>`;
+        
+        // Group participants by program category
+        const categoryCounts = {};
+        participants.forEach(p => {
+            categoryCounts[p.programCategory] = (categoryCounts[p.programCategory] || 0) + 1;
+        });
+        
+        html += '<h5>Participants by Program Category:</h5><ul>';
+        for (const category in categoryCounts) {
+            html += `<li>${category}: ${categoryCounts[category]} participants</li>`;
+        }
+        html += '</ul>';
+        
+        return html;
+    }
+    
+    // Function to generate attendance report
+    function generateAttendanceReport(participants, programs) {
+        let html = '<h4>Attendance Summary Report</h4>';
+        html += `<p>Total Registrations: ${participants.length}</p>`;
+        
+        // Calculate average age
+        const totalAge = participants.reduce((sum, p) => sum + parseInt(p.age), 0);
+        const avgAge = participants.length > 0 ? (totalAge / participants.length).toFixed(1) : 0;
+        html += `<p>Average Participant Age: ${avgAge}</p>`;
+        
+        return html;
+    }
+    
+    // Function to generate feedback report
+    function generateFeedbackReport() {
+        return `
+            <h4>Feedback Analysis Report</h4>
+            <p>This report would analyze feedback from program participants.</p>
+            <p>In a full implementation, this would include:</p>
+            <ul>
+                <li>Participant satisfaction ratings</li>
+                <li>Common feedback themes</li>
+                <li>Suggestions for improvement</li>
+                <li>Program effectiveness metrics</li>
+            </ul>
+        `;
+    }
+    
+    // Function to generate demographic report
+    function generateDemographicReport(participants) {
+        let html = '<h4>Participant Demographics Report</h4>';
+        
+        // Age distribution
+        const ageGroups = {
+            '15-17': 0,
+            '18-21': 0,
+            '22-25': 0,
+            '26-30': 0
+        };
+        
+        participants.forEach(p => {
+            const age = parseInt(p.age);
+            if (age >= 15 && age <= 17) ageGroups['15-17']++;
+            else if (age >= 18 && age <= 21) ageGroups['18-21']++;
+            else if (age >= 22 && age <= 25) ageGroups['22-25']++;
+            else if (age >= 26 && age <= 30) ageGroups['26-30']++;
+        });
+        
+        html += '<h5>Age Distribution:</h5><ul>';
+        for (const group in ageGroups) {
+            html += `<li>${group}: ${ageGroups[group]} participants</li>`;
+        }
+        html += '</ul>';
+        
+        return html;
+    }
+    
+    // Function to generate custom report
+    function generateCustomReport(message, participants, programs) {
+        return `
+            <h4>Custom Report</h4>
+            <p>${message}</p>
+            <p>This custom report includes data for ${participants.length} participants across ${programs.length} programs.</p>
+            <p>Generated on: ${new Date().toLocaleDateString()}</p>
+        `;
+    }
+    
+    // Function to show toast notifications
+    function showToast(message, type = 'success') {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = 'toast';
+        
+        if (type === 'error') {
+            toast.classList.add('error');
+        }
+        
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+    
+    // Function to logout
+    function logout() {
+        localStorage.setItem('isLoggedIn', 'false');
+        localStorage.removeItem('currentUser');
+        updateAuthUI();
+        loadParticipantsTable();
+        showToast('You have been logged out successfully.');
+    }
+    
+    // Function to update authentication UI
+    function updateAuthUI() {
+        const userProfile = document.getElementById('user-profile');
+        const guestButtons = document.getElementById('guest-buttons');
+        const body = document.body;
+        const currentUser = getCurrentUser();
+        
+        if (isLoggedIn() && currentUser) {
+            userProfile.classList.remove('hidden');
+            guestButtons.classList.add('hidden');
+            body.classList.add('logged-in');
+            body.classList.add('admin');
+            
+            // Update user info
+            document.getElementById('user-name').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+            document.getElementById('user-role').textContent = 'Administrator';
+            document.getElementById('user-avatar').textContent = currentUser.firstName ? 
+                currentUser.firstName.charAt(0).toUpperCase() : 
+                currentUser.username.charAt(0).toUpperCase();
+        } else {
+            userProfile.classList.add('hidden');
+            guestButtons.classList.remove('hidden');
+            body.classList.remove('logged-in', 'admin');
+        }
+    }
+</script>
+</body>
+</html>

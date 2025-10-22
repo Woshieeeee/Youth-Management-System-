@@ -1,0 +1,12 @@
+{
+  "name": "youth-management-system",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo Building site",
+    "start": "serve -s build"
+  },
+  "devDependencies": {
+    "serve": "^14.0.0"
+  }
+}
