@@ -2,4 +2,5 @@ DEPLOYMENT
      https://vercel.com/woshieeeees-projects/youth-management-system/33B4BTky6ika1U1DvpGpjbfBXD5r
 
 DOMAIN
-     https://youth-management-system-git-main-woshieeeees-projects.vercel.app/
+
+     https://youth-management-system.vercel.app/
