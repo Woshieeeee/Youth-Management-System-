@@ -106,13 +106,22 @@
             letter-spacing: 0.2px;
         }
 
+        /* FIXED: Navigation styles - improved alignment */
+        nav {
+            flex: 1;
+            margin: 0 0px;
+        }
+        
         nav ul {
             display: flex;
             list-style: none;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 5px;
         }
         
         nav ul li {
-            margin-left: 15px;
+            margin: 0;
         }
         
         nav ul li a {
@@ -122,6 +131,8 @@
             padding: 8px 15px;
             border-radius: 4px;
             transition: all 0.3s;
+            display: block;
+            white-space: nowrap;
         }
         
         nav ul li a:hover, nav ul li a.active {
@@ -134,6 +145,7 @@
             gap: 10px;
             align-items: center;
             flex-wrap: nowrap;
+            flex-shrink: 0;
         }
 
         #guest-buttons {
@@ -236,6 +248,11 @@
                 gap: 20px;
             }
             
+            nav {
+                margin: 10px 0;
+                width: 100%;
+            }
+            
             nav ul {
                 margin-top: 10px;
                 flex-wrap: wrap;
@@ -304,6 +321,7 @@
             }
         }
 
+        /* Rest of the CSS remains the same... */
         /* Hero Section */
         .hero {
             background: linear-gradient(rgba(138, 79, 255, 0.85), rgba(106, 47, 207, 0.9)), url('https://images.unsplash.com/photo-1551135049-8a33b42738b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
@@ -1622,6 +1640,111 @@
             color: var(--primary);
             margin-bottom: 10px;
         }
+        
+        /* NEW STYLES FOR CONTACT MANAGEMENT */
+        .contact-message {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .contact-message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .contact-message-meta {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .contact-user-details {
+            background-color: var(--purple-light);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        
+        .contact-user-details h5 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .contact-user-details p {
+            margin-bottom: 5px;
+        }
+        
+        /* NEW STYLES FOR CREATE ADMIN ACCOUNT */
+        /* Add to the existing CSS styles */
+.create-admin-form .modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 25px;
+}
+
+.admin-accounts-list {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.admin-account-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.admin-account-item:last-child {
+    border-bottom: none;
+}
+
+/* Custom scrollbar styling */
+.create-admin-form .modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.create-admin-form .modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.create-admin-form .modal-body::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 4px;
+}
+
+.create-admin-form .modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+.admin-accounts-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.admin-accounts-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.admin-accounts-list::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 4px;
+}
+
+.admin-accounts-list::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
     </style>
 </head>
 <body>
@@ -1657,6 +1780,7 @@
                     </div>
                     <div class="admin-nav-buttons">
                         <button class="btn btn-secondary" id="change-password-btn">Change Password</button>
+                        <button class="btn btn-secondary" id="create-admin-btn">Create Admin</button>
                         <button class="btn btn-outline" id="logout-btn">Logout</button>
                     </div>
                 </div>
@@ -1778,6 +1902,58 @@
                         <button type="submit" class="btn">Update Password</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Admin Account Modal -->
+    <div id="create-admin-modal" class="modal">
+        <div class="modal-content create-admin-form">
+            <div class="modal-header">
+                <h2>Create New Admin Account</h2>
+                <button class="close-modal" id="close-create-admin-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="create-admin-form">
+                    <div class="form-group">
+                        <label for="admin-username">Username</label>
+                        <input type="text" class="form-control" id="admin-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-email">Email</label>
+                        <input type="email" class="form-control" id="admin-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-first-name">First Name</label>
+                        <input type="text" class="form-control" id="admin-first-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-last-name">Last Name</label>
+                        <input type="text" class="form-control" id="admin-last-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-password">Password</label>
+                        <input type="password" class="form-control" id="admin-password" required>
+                        <button type="button" class="password-toggle" id="admin-password-toggle"><i class="far fa-eye"></i></button>
+                        <div class="password-strength" id="admin-password-strength"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-confirm-password">Confirm Password</label>
+                        <input type="password" class="form-control" id="admin-confirm-password" required>
+                        <button type="button" class="password-toggle" id="admin-confirm-password-toggle"><i class="far fa-eye"></i></button>
+                        <small class="error-message" id="admin-confirm-password-error"></small>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn">Create Admin Account</button>
+                    </div>
+                </form>
+                
+                <div class="admin-accounts-list">
+                    <h4>Existing Admin Accounts</h4>
+                    <div id="admin-accounts-container">
+                        <!-- Admin accounts will be listed here -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -2097,7 +2273,7 @@
                     <a href="#" class="btn mt-4">Learn More About Our History</a>
                 </div>
                 <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1551135049-8a33b42738b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Barangay Longos Community">
+                    <img src="img/473167306_1033118095286819_6642376365709617030_n.jpg" alt="Barangay Longos Community">
                 </div>
             </div>
             
@@ -2814,44 +2990,63 @@
             </section>
             
             <div class="form-container">
-                <div class="about-content">
-                    <div class="about-text">
-                        <h3>Barangay Longos Office</h3>
-                        <p><i class="fas fa-map-marker-alt"></i> Longos, Malabon, Philippines 1472</p>
-                        <p><i class="fas fa-phone"></i> (02) 1234-5678</p>
-                        <p><i class="fas fa-envelope"></i> sangguniankabataan.brgylongos@gmail.com</p>
-                        <p><i class="fas fa-clock"></i> Office Hours: Monday-Friday, 8:00 AM - 5:00 PM</p>
+                <!-- Contact form for regular users -->
+                <div class="guest-only">
+                    <div class="about-content">
+                        <div class="about-text">
+                            <h3>Barangay Longos Office</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> Longos, Malabon, Philippines 1472</p>
+                            <p><i class="fas fa-phone"></i> (02) 1234-5678</p>
+                            <p><i class="fas fa-envelope"></i> sangguniankabataan.brgylongos@gmail.com</p>
+                            <p><i class="fas fa-clock"></i> Office Hours: Monday-Friday, 8:00 AM - 5:00 PM</p>
+                            
+                            <h4 style="margin-top: 30px;">SK Chairperson</h4>
+                            <p><strong>Irish S. Evangelista</strong></p>
+                            <p><i class="fas fa-envelope"></i> irish.evangelista@brgylongos.gov.ph</p>
+                        </div>
                         
-                        <h4 style="margin-top: 30px;">SK Chairperson</h4>
-                        <p><strong>Irish S. Evangelista</strong></p>
-                        <p><i class="fas fa-envelope"></i> irish.evangelista@brgylongos.gov.ph</p>
+                        <div class="about-text">
+                            <h3>Send Us a Message</h3>
+                            <form id="contact-form">
+                                <div class="form-group">
+                                    <label for="contact-name">Your Name</label>
+                                    <input type="text" class="form-control" id="contact-name" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contact-email">Email Address</label>
+                                    <input type="email" class="form-control" id="contact-email" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contact-subject">Subject</label>
+                                    <input type="text" class="form-control" id="contact-subject" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contact-message">Message</label>
+                                    <textarea class="form-control" id="contact-message" rows="5" required></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn">Send Message</button>
+                            </form>
+                        </div>
                     </div>
-                    
-                    <div class="about-text">
-                        <h3>Send Us a Message</h3>
-                        <form id="contact-form">
-                            <div class="form-group">
-                                <label for="contact-name">Your Name</label>
-                                <input type="text" class="form-control" id="contact-name" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="contact-email">Email Address</label>
-                                <input type="email" class="form-control" id="contact-email" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="contact-subject">Subject</label>
-                                <input type="text" class="form-control" id="contact-subject" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="contact-message">Message</label>
-                                <textarea class="form-control" id="contact-message" rows="5" required></textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn">Send Message</button>
-                        </form>
+                </div>
+                
+                <!-- Contact Messages for Admin -->
+                <div class="admin-only">
+                    <h3>Contact Messages from Users</h3>
+                    <div class="filter-controls">
+                        <select id="contact-status-filter">
+                            <option value="">All Statuses</option>
+                            <option value="unread">Unread</option>
+                            <option value="read">Read</option>
+                        </select>
+                        <input type="text" id="search-contact-messages" placeholder="Search messages...">
+                    </div>
+                    <div id="contact-messages-list">
+                        <!-- Contact messages will be displayed here -->
                     </div>
                 </div>
             </div>
@@ -2920,6 +3115,21 @@
             localStorage.setItem('adminPassword', 'admin12345');
         }
         
+        // Initialize admin accounts if not exists
+        if (!localStorage.getItem('adminAccounts')) {
+            const defaultAdminAccounts = [
+                {
+                    id: 1,
+                    username: 'admin',
+                    email: 'admin@brgylongos.gov.ph',
+                    firstName: 'System',
+                    lastName: 'Administrator',
+                    role: 'admin'
+                }
+            ];
+            localStorage.setItem('adminAccounts', JSON.stringify(defaultAdminAccounts));
+        }
+        
         // Initialize participants if not exists
         if (!localStorage.getItem('participants')) {
             localStorage.setItem('participants', JSON.stringify([]));
@@ -2928,6 +3138,11 @@
         // Initialize user reports if not exists
         if (!localStorage.getItem('userReports')) {
             localStorage.setItem('userReports', JSON.stringify([]));
+        }
+        
+        // Initialize contact messages if not exists
+        if (!localStorage.getItem('contactMessages')) {
+            localStorage.setItem('contactMessages', JSON.stringify([]));
         }
         
         // Initialize programs if not exists
@@ -3034,6 +3249,11 @@
             loadUserSubmittedReports();
         }
         
+        // Load contact messages if on contact page
+        if (document.getElementById('contact-content') && !document.getElementById('contact-content').classList.contains('hidden')) {
+            loadContactMessages();
+        }
+        
         // Show home page by default
         document.getElementById('home-content').classList.remove('hidden');
         
@@ -3084,6 +3304,11 @@
                     if (targetPage === 'user-report') {
                         loadUserSubmittedReports();
                     }
+                    
+                    // Load contact messages if on contact page
+                    if (targetPage === 'contact') {
+                        loadContactMessages();
+                    }
                 }
             });
         });
@@ -3095,10 +3320,12 @@
         const closeForgotPasswordModal = document.getElementById('close-forgot-password-modal');
         const closeEditParticipantModal = document.getElementById('close-edit-participant-modal');
         const closeChangePasswordModal = document.getElementById('close-change-password');
+        const closeCreateAdminModal = document.getElementById('close-create-admin-modal');
         const loginModal = document.getElementById('login-modal');
         const forgotPasswordModal = document.getElementById('forgot-password-modal');
         const editParticipantModal = document.getElementById('edit-participant-modal');
         const changePasswordModal = document.getElementById('change-password-modal');
+        const createAdminModal = document.getElementById('create-admin-modal');
         
         // Open modals
         loginBtn.addEventListener('click', function() {
@@ -3119,6 +3346,12 @@
             document.querySelector('nav a[data-page="programs"]').classList.add('active');
         });
         
+        // Create admin button
+        document.getElementById('create-admin-btn').addEventListener('click', function() {
+            createAdminModal.classList.add('active');
+            loadAdminAccounts();
+        });
+        
         // Close modals
         closeLoginModal.addEventListener('click', function() {
             loginModal.classList.remove('active');
@@ -3134,6 +3367,10 @@
         
         closeChangePasswordModal.addEventListener('click', function() {
             changePasswordModal.classList.remove('active');
+        });
+        
+        closeCreateAdminModal.addEventListener('click', function() {
+            createAdminModal.classList.remove('active');
         });
         
         document.getElementById('cancel-edit-btn').addEventListener('click', function() {
@@ -3153,6 +3390,9 @@
             }
             if (e.target === changePasswordModal) {
                 changePasswordModal.classList.remove('active');
+            }
+            if (e.target === createAdminModal) {
+                createAdminModal.classList.remove('active');
             }
         });
         
@@ -3221,6 +3461,14 @@
             togglePasswordVisibility('confirm-new-password-reset', this);
         });
         
+        document.getElementById('admin-password-toggle').addEventListener('click', function() {
+            togglePasswordVisibility('admin-password', this);
+        });
+        
+        document.getElementById('admin-confirm-password-toggle').addEventListener('click', function() {
+            togglePasswordVisibility('admin-confirm-password', this);
+        });
+        
         // Password strength indicator
         document.getElementById('new-password').addEventListener('input', function() {
             checkPasswordStrength(this.value, 'new-password-strength');
@@ -3228,6 +3476,10 @@
         
         document.getElementById('new-password-reset').addEventListener('input', function() {
             checkPasswordStrength(this.value, 'new-password-reset-strength');
+        });
+        
+        document.getElementById('admin-password').addEventListener('input', function() {
+            checkPasswordStrength(this.value, 'admin-password-strength');
         });
         
         // Program category change handler
@@ -3263,8 +3515,7 @@
         
         document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            showToast('Your message has been sent successfully!');
-            this.reset();
+            submitContactMessage();
         });
         
         document.getElementById('login-form').addEventListener('submit', function(e) {
@@ -3280,6 +3531,11 @@
         document.getElementById('change-password-form').addEventListener('submit', function(e) {
             e.preventDefault();
             handleChangePassword();
+        });
+        
+        document.getElementById('create-admin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleCreateAdmin();
         });
         
         document.getElementById('user-report-form').addEventListener('submit', function(e) {
@@ -3352,6 +3608,15 @@
                 navLink.classList.remove('active');
             });
             document.querySelector('nav a[data-page="programs"]').classList.add('active');
+        });
+        
+        // Contact message filters
+        document.getElementById('contact-status-filter').addEventListener('change', function() {
+            loadContactMessages();
+        });
+        
+        document.getElementById('search-contact-messages').addEventListener('input', function() {
+            loadContactMessages();
         });
     });
     
@@ -3436,20 +3701,16 @@
             return;
         }
         
+        // Get admin accounts
+        const adminAccounts = JSON.parse(localStorage.getItem('adminAccounts') || '[]');
+        const adminAccount = adminAccounts.find(account => account.username === username);
+        
         // Check credentials - SIMPLE AND DIRECT
-        if (username === 'admin' && password === localStorage.getItem('adminPassword')) {
+        if (adminAccount && password === localStorage.getItem('adminPassword')) {
             showToast('Login successful!');
             
             // Set current user
-            const currentUser = {
-                id: 1,
-                username: 'admin',
-                email: 'admin@brgylongos.gov.ph',
-                firstName: 'System',
-                lastName: 'Administrator',
-                role: 'admin'
-            };
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            localStorage.setItem('currentUser', JSON.stringify(adminAccount));
             localStorage.setItem('isLoggedIn', 'true');
             
             updateAuthUI();
@@ -3542,6 +3803,107 @@
         showToast('Password updated successfully!');
         document.getElementById('change-password-modal').classList.remove('active');
         document.getElementById('change-password-form').reset();
+    }
+    
+    // Function to handle create admin
+    function handleCreateAdmin() {
+        const username = document.getElementById('admin-username').value;
+        const email = document.getElementById('admin-email').value;
+        const firstName = document.getElementById('admin-first-name').value;
+        const lastName = document.getElementById('admin-last-name').value;
+        const password = document.getElementById('admin-password').value;
+        const confirmPassword = document.getElementById('admin-confirm-password').value;
+        const errorElement = document.getElementById('admin-confirm-password-error');
+        
+        // Validation
+        if (!username || !email || !firstName || !lastName || !password || !confirmPassword) {
+            showToast('Please fill in all fields', 'error');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            errorElement.textContent = 'Passwords do not match';
+            return;
+        } else {
+            errorElement.textContent = '';
+        }
+        
+        if (password.length < 8) {
+            showToast('Password must be at least 8 characters long', 'error');
+            return;
+        }
+        
+        // Get admin accounts
+        const adminAccounts = JSON.parse(localStorage.getItem('adminAccounts') || '[]');
+        
+        // Check if username already exists
+        if (adminAccounts.find(account => account.username === username)) {
+            showToast('Username already exists', 'error');
+            return;
+        }
+        
+        // Add new admin account
+        const newAdminAccount = {
+            id: adminAccounts.length > 0 ? Math.max(...adminAccounts.map(a => a.id)) + 1 : 1,
+            username: username,
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            role: 'admin'
+        };
+        
+        adminAccounts.push(newAdminAccount);
+        localStorage.setItem('adminAccounts', JSON.stringify(adminAccounts));
+        
+        showToast('Admin account created successfully!');
+        document.getElementById('create-admin-form').reset();
+        loadAdminAccounts();
+    }
+    
+    // Function to load admin accounts
+    function loadAdminAccounts() {
+        const adminAccountsContainer = document.getElementById('admin-accounts-container');
+        adminAccountsContainer.innerHTML = '';
+        
+        const adminAccounts = JSON.parse(localStorage.getItem('adminAccounts') || '[]');
+        
+        adminAccounts.forEach(account => {
+            const accountItem = document.createElement('div');
+            accountItem.className = 'admin-account-item';
+            accountItem.innerHTML = `
+                <div>
+                    <strong>${account.username}</strong> - ${account.firstName} ${account.lastName}
+                    <br>
+                    <small>${account.email}</small>
+                </div>
+                <div>
+                    <button class="action-btn delete-btn" data-id="${account.id}">Delete</button>
+                </div>
+            `;
+            
+            adminAccountsContainer.appendChild(accountItem);
+        });
+        
+        // Add event listeners for delete buttons
+        document.querySelectorAll('#admin-accounts-container .delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const accountId = this.getAttribute('data-id');
+                deleteAdminAccount(accountId);
+            });
+        });
+    }
+    
+    // Function to delete admin account
+    function deleteAdminAccount(id) {
+        const adminAccounts = JSON.parse(localStorage.getItem('adminAccounts') || '[]');
+        const account = adminAccounts.find(a => a.id === parseInt(id));
+        
+        if (account && confirm(`Are you sure you want to delete admin account ${account.username}?`)) {
+            const updatedAccounts = adminAccounts.filter(a => a.id !== parseInt(id));
+            localStorage.setItem('adminAccounts', JSON.stringify(updatedAccounts));
+            showToast('Admin account deleted successfully');
+            loadAdminAccounts();
+        }
     }
     
     // Function to register a participant
@@ -3959,6 +4321,158 @@
         }
     }
     
+    // Function to submit a contact message
+    function submitContactMessage() {
+        const name = document.getElementById('contact-name').value;
+        const email = document.getElementById('contact-email').value;
+        const subject = document.getElementById('contact-subject').value;
+        const message = document.getElementById('contact-message').value;
+        
+        // Validate form
+        if (!name || !email || !subject || !message) {
+            showToast('Please fill in all required fields', 'error');
+            return;
+        }
+        
+        // Get existing contact messages
+        const contactMessages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+        
+        // Add new contact message
+        const newContactMessage = {
+            id: contactMessages.length > 0 ? Math.max(...contactMessages.map(m => m.id)) + 1 : 1,
+            name: name,
+            email: email,
+            subject: subject,
+            message: message,
+            date: new Date().toISOString(),
+            status: 'unread'
+        };
+        
+        contactMessages.push(newContactMessage);
+        localStorage.setItem('contactMessages', JSON.stringify(contactMessages));
+        
+        // Show success message
+        showToast('Your message has been sent successfully!');
+        
+        // Reset the form
+        document.getElementById('contact-form').reset();
+        
+        // Reload contact messages
+        loadContactMessages();
+    }
+    
+    // Function to load contact messages for admin
+    function loadContactMessages() {
+        const contactMessagesList = document.getElementById('contact-messages-list');
+        if (!contactMessagesList) return;
+        
+        contactMessagesList.innerHTML = '';
+        
+        const contactMessages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+        
+        // Apply filters
+        const statusFilter = document.getElementById('contact-status-filter').value;
+        const searchTerm = document.getElementById('search-contact-messages').value.toLowerCase();
+        
+        let filteredMessages = contactMessages;
+        
+        if (statusFilter) {
+            filteredMessages = filteredMessages.filter(m => m.status === statusFilter);
+        }
+        
+        if (searchTerm) {
+            filteredMessages = filteredMessages.filter(m => 
+                m.name.toLowerCase().includes(searchTerm) || 
+                m.subject.toLowerCase().includes(searchTerm) ||
+                m.message.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        // Sort by date (newest first)
+        filteredMessages.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Populate contact messages
+        if (filteredMessages.length === 0) {
+            contactMessagesList.innerHTML = '<p>No contact messages found.</p>';
+            return;
+        }
+        
+        filteredMessages.forEach(message => {
+            const messageItem = document.createElement('div');
+            messageItem.className = 'contact-message';
+            
+            messageItem.innerHTML = `
+                <div class="contact-message-header">
+                    <div>
+                        <h4>${message.subject}</h4>
+                        <div class="contact-message-meta">
+                            From: ${message.name} | 
+                            ${new Date(message.date).toLocaleDateString()} | 
+                            ${new Date(message.date).toLocaleTimeString()}
+                        </div>
+                    </div>
+                    <span class="report-status ${message.status === 'unread' ? 'status-pending' : 'status-resolved'}">${message.status}</span>
+                </div>
+                <div class="contact-message-content">
+                    <p>${message.message}</p>
+                </div>
+                <div class="contact-user-details">
+                    <h5>User Details</h5>
+                    <p><strong>Name:</strong> ${message.name}</p>
+                    <p><strong>Email:</strong> ${message.email}</p>
+                </div>
+                <div class="report-actions">
+                    <button class="action-btn edit-btn" data-id="${message.id}" data-action="read">Mark as Read</button>
+                    <button class="action-btn delete-btn" data-id="${message.id}">Delete</button>
+                </div>
+            `;
+            
+            contactMessagesList.appendChild(messageItem);
+        });
+        
+        // Add event listeners for action buttons
+        document.querySelectorAll('#contact-messages-list .edit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const messageId = this.getAttribute('data-id');
+                const action = this.getAttribute('data-action');
+                updateContactMessageStatus(messageId, action);
+            });
+        });
+        
+        document.querySelectorAll('#contact-messages-list .delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const messageId = this.getAttribute('data-id');
+                deleteContactMessage(messageId);
+            });
+        });
+    }
+    
+    // Function to update contact message status
+    function updateContactMessageStatus(messageId, status) {
+        const contactMessages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+        const index = contactMessages.findIndex(m => m.id === parseInt(messageId));
+        
+        if (index !== -1) {
+            contactMessages[index].status = 'read';
+            localStorage.setItem('contactMessages', JSON.stringify(contactMessages));
+            showToast('Contact message marked as read');
+            loadContactMessages();
+        }
+    }
+    
+    // Function to delete contact message
+    function deleteContactMessage(id) {
+        const contactMessages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+        const message = contactMessages.find(m => m.id === parseInt(id));
+        
+        if (message && confirm(`Are you sure you want to delete this contact message?`)) {
+            const updatedMessages = contactMessages.filter(m => m.id !== parseInt(id));
+            localStorage.setItem('contactMessages', JSON.stringify(updatedMessages));
+            showToast('Contact message deleted successfully');
+            loadContactMessages();
+        }
+    }
+    
     // Function to generate reports
     function generateReport() {
         const reportType = document.getElementById('report-type').value;
@@ -4131,30 +4645,72 @@
     }
     
     // Function to update authentication UI
+    // ...existing code...
+    // Function to update authentication UI
     function updateAuthUI() {
         const userProfile = document.getElementById('user-profile');
         const guestButtons = document.getElementById('guest-buttons');
         const body = document.body;
         const currentUser = getCurrentUser();
-        
+        const loginBtn = document.getElementById('loginBtn'); // added
+
         if (isLoggedIn() && currentUser) {
             userProfile.classList.remove('hidden');
             guestButtons.classList.add('hidden');
             body.classList.add('logged-in');
             body.classList.add('admin');
-            
+
             // Update user info
             document.getElementById('user-name').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
             document.getElementById('user-role').textContent = 'Administrator';
             document.getElementById('user-avatar').textContent = currentUser.firstName ? 
                 currentUser.firstName.charAt(0).toUpperCase() : 
                 currentUser.username.charAt(0).toUpperCase();
+
+            // Change login button text to "Switch Acc" when admin is logged in
+            if (loginBtn) loginBtn.textContent = 'Switch Acc';
         } else {
             userProfile.classList.add('hidden');
             guestButtons.classList.remove('hidden');
             body.classList.remove('logged-in', 'admin');
+
+            // Reset login button text to "Login" when not logged in
+            if (loginBtn) loginBtn.textContent = 'Login';
         }
     }
+// ...existing code...
+    function updateAuthUI() {
+        const userProfile = document.getElementById('user-profile');
+        const guestButtons = document.getElementById('guest-buttons');
+        const body = document.body;
+        const currentUser = getCurrentUser();
+        const loginBtn = document.getElementById('loginBtn'); // added
+
+        if (isLoggedIn() && currentUser) {
+            userProfile.classList.remove('hidden');
+            guestButtons.classList.add('hidden');
+            body.classList.add('logged-in');
+            body.classList.add('admin');
+
+            // Update user info
+            document.getElementById('user-name').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+            document.getElementById('user-role').textContent = 'Administrator';
+            document.getElementById('user-avatar').textContent = currentUser.firstName ? 
+                currentUser.firstName.charAt(0).toUpperCase() : 
+                currentUser.username.charAt(0).toUpperCase();
+
+            // Change login button text to "Switch Acc" when admin is logged in
+            if (loginBtn) loginBtn.textContent = 'Switch Acc';
+        } else {
+            userProfile.classList.add('hidden');
+            guestButtons.classList.remove('hidden');
+            body.classList.remove('logged-in', 'admin');
+
+            // Reset login button text to "Login" when not logged in
+            if (loginBtn) loginBtn.textContent = 'Login';
+        }
+    }
+
 </script>
 </body>
 </html>
